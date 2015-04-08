@@ -1,9 +1,44 @@
 package wcu;
 
+import java.io.IOException;
+
 public class FileHandler {
 
+	//	String kun til test
+	String textfile = "something";
+
 	public FileHandler() {
-		// TODO Auto-generated constructor stub
 	}
 
+	public void showReadFile(){
+		//		Her defineres stien der skal læses fra:		
+		//		String textfile = "C:/Users/Andreas/workspace/Datakommunikation/ReadFile/src/store.txt";
+		try{
+			ReadFile file = new ReadFile(textfile);
+			String[] arraytext = file.OpenFile();
+
+			for (int i = 0; i < arraytext.length; i++){
+				System.out.println(arraytext[i]);
+			}
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	public void executeWriteFile(){
+
+		try{
+			WriteFile data = new WriteFile(textfile, true);
+
+			//		Her skrives teksten der skal gemmes
+			data.writeTofileFile("OST");
+
+			//			Her defineres stien der skal skrive til:			
+			//			System.out.println("C:/Users/Andreas/workspace/Datakommunikation/ReadFile/src/store.txt");
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+
+	}
 }
