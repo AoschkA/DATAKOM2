@@ -5,14 +5,16 @@ import java.io.IOException;
 public class FileHandler {
 
 	//	String kun til test
-	String textfile = "something";
-
-	public FileHandler() {
+	//	String textfile = "something";
+	
+	//	Her defineres stien der skal læses fra/ eller skrives til.		
+			String textfile = "C:/Users/Andreas/git/DATAKOM2/12_DATAKOM2/src/wcu/store.txt";
+	
+			public FileHandler() {
 	}
 
 	public void showReadFile(){
-		//		Her defineres stien der skal læses fra:		
-		//		String textfile = "C:/Users/Andreas/workspace/Datakommunikation/ReadFile/src/store.txt";
+		
 		try{
 			ReadFile file = new ReadFile(textfile);
 			String[] arraytext = file.OpenFile();
