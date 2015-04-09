@@ -86,7 +86,7 @@ public class FileHandler {
 	}
 	public void checkIfOperatorExists(){
 
-		boolean exists = false;
+		boolean Oexists = false;
 		try{
 			ReadFile file = new ReadFile(operatoerTextFile);
 			String[] arraytext = file.OpenFile();
@@ -103,11 +103,41 @@ public class FileHandler {
 				}
 			}
 			if(count==1){
-				exists = true;
+				Oexists = true;
 				System.out.println("Operatoer Godkendt");
 			}
 			else {
 				System.out.println("Operatoer findes ikke");
+			}
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+	}	
+	public void checkIfIngredientExists(){
+
+		boolean Iexists = false;
+		try{
+			ReadFile file = new ReadFile(storeTextFile);
+			String[] arraytext = file.OpenFile();
+			int count = 0;
+			
+//			Brugeren skal indtaste varenummer selv.
+			int varenummer = 16;
+			for (int i = 0; i < arraytext.length; i++){
+				String word = arraytext[i];
+				String [] wordsinline = word.split(",");
+
+				if (varenummer == Integer.parseInt(wordsinline[0])) {
+					count ++;
+				}
+			}
+			if(count==1){
+				Iexists = true;
+				System.out.println("Varen Findes");
+			}
+			else {
+				System.out.println("Varen Findes Ikke");
 			}
 		}
 		catch (IOException e){
