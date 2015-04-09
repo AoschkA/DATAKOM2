@@ -74,6 +74,8 @@ public class FileHandler {
 			ReadFile file = new ReadFile(operatoerTextFile);
 			String[] arraytext = file.OpenFile();
 			int count = 0;
+			
+//			Brugeren skal indtaste sc selv.
 			int sc = 10231;
 			for (int i = 0; i < arraytext.length; i++){
 				String word = arraytext[i];
