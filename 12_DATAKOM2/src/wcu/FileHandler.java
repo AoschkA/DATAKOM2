@@ -18,23 +18,21 @@ public class FileHandler {
 		try{
 			ReadFile file = new ReadFile(textfile);
 			String[] arraytext = file.OpenFile();
-//			String sc = "1";
+			int sc = 1;
 			for (int i = 0; i < arraytext.length; i++){
-				System.out.println(arraytext[i]);
-//				String word = arraytext[i];
-//				String [] wordsinline = word.split(",");
-//
-//
-//				if (sc == wordsinline[0]){
-//					System.out.println("Godkendt");
-//
-//				}
-//				else {
-//					System.out.println("Findes ikke");
+				//				System.out.println(arraytext[i]);
+				String word = arraytext[i];
+				String [] wordsinline = word.split(",");
+
+
+				if (sc == Integer.parseInt(wordsinline[0])) {
+					System.out.println("Godkendt");
+
 				}
-				//				System.out.println(wordsinline[2]);
-				//				System.out.println(arraytext[5]);
-//			}
+				else {
+					System.out.println("Findes ikke");
+				}
+			}
 		}
 		catch (IOException e){
 			System.out.println(e.getMessage());
@@ -55,10 +53,33 @@ public class FileHandler {
 			System.out.println(e.getMessage());
 		}
 	}
-	public void showNextString(){
+	public void checkIfOperatorExists(){
+		
+		boolean exists = false;
+		try{
+			ReadFile file = new ReadFile(textfile);
+			String[] arraytext = file.OpenFile();
+			int count = 0;
+			int sc = 15;
+			for (int i = 0; i < arraytext.length; i++){
+				String word = arraytext[i];
+				String [] wordsinline = word.split(",");
 
-
-
-	}
+				if (sc == Integer.parseInt(wordsinline[0])) {
+					count ++;
+								}
+							}
+			if(count==1){
+				exists = true;
+				System.out.println("Operatoer Godkendt");
+			}
+			else {
+				System.out.println("Operatoer findes ikke");
+			}
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+	}	
 }
 
