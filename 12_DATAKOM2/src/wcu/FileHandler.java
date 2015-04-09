@@ -6,22 +6,35 @@ public class FileHandler {
 
 	//	String kun til test
 	//	String textfile = "something";
-	
+
 	//	Her defineres stien der skal læses fra/ eller skrives til.		
-			String textfile = "C:/Users/Andreas/git/DATAKOM2/12_DATAKOM2/src/wcu/store.txt";
-	
-			public FileHandler() {
+	String textfile = "C:/Users/Andreas/git/DATAKOM2/12_DATAKOM2/src/wcu/store.txt";
+
+	public FileHandler() {
 	}
 
 	public void showReadFile(){
-		
+
 		try{
 			ReadFile file = new ReadFile(textfile);
 			String[] arraytext = file.OpenFile();
-
+//			String sc = "1";
 			for (int i = 0; i < arraytext.length; i++){
 				System.out.println(arraytext[i]);
-			}
+//				String word = arraytext[i];
+//				String [] wordsinline = word.split(",");
+//
+//
+//				if (sc == wordsinline[0]){
+//					System.out.println("Godkendt");
+//
+//				}
+//				else {
+//					System.out.println("Findes ikke");
+				}
+				//				System.out.println(wordsinline[2]);
+				//				System.out.println(arraytext[5]);
+//			}
 		}
 		catch (IOException e){
 			System.out.println(e.getMessage());
@@ -41,6 +54,11 @@ public class FileHandler {
 		catch (IOException e){
 			System.out.println(e.getMessage());
 		}
+	}
+	public void showNextString(){
+
+
 
 	}
 }
+
