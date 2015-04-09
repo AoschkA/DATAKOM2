@@ -9,7 +9,7 @@ public class FileHandler {
 
 	String operatoerTextFile = "data.text/operatoer.txt";
 	String storeTextFile = "data.text/store.txt";
-
+	String testTextFile = "data.text/test";
 	public FileHandler() {
 	}
 
@@ -60,6 +60,23 @@ public class FileHandler {
 			WriteFile data = new WriteFile(storeTextFile, true);
 
 			//		Her skrives teksten der skal gemmes
+			data.writeTofileFile("OST");
+
+		}
+		catch (IOException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	public void writeToTestFile(){
+
+		try{
+			
+//			Hvis argumentet er true skrives teksten efter den tekst der står der i forvejen,
+//			hvis argumentet er false overskriver den hele teksten
+			
+			WriteFile data = new WriteFile(testTextFile, false);
+
+//			Her skrives teksten der skal gemmes
 			data.writeTofileFile("OST");
 
 		}
