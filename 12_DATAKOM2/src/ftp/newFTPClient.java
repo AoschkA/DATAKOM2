@@ -48,12 +48,23 @@ public class newFTPClient implements IFTPClient{
 	}
 	@Override
 	public boolean retrieveFile(String filename, OutputStream output) {
-		
+		// retrive command == RETR
 		return false;
 	}
 	@Override
 	public boolean logout() {
-		// TODO Auto-generated method stub
+		try{
+			sendLine("QUIT");
+			String response = readLine();
+			
+			if(!response.startsWith("231")){
+				throw new IOException("User not logged out");
+			}else{
+				System.out.println("User has been disconnected");
+			}
+		}catch (Exception e){
+			System.out.println("couldn't log out");
+		}
 		return false;
 	}
 	@Override
