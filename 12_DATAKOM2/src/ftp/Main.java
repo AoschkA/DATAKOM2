@@ -1,10 +1,13 @@
 package ftp;
+import java.io.IOException;
+
 import ftp.IOControllerFTP;
+import ftp.Exceptions.NoInputException;
 
 public class Main {
-	static IOControllerFTP ftp = new IOControllerFTP();
-	public static void main(String[] args) {
-		ftp.IOControllerFTP();
+	static newFTPClient ftp = new newFTPClient();
+	public static void main(String[] args) throws IOException, NoInputException {
+		ftp.newFTPClient();
 	}
 
 }

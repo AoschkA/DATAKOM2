@@ -5,11 +5,9 @@ import java.io.IOException;
 import boundary_ftp.TUI;
 
 public class IOControllerFTP {
-	private TUI TUI = new TUI();
-	
-	public IOControllerFTP(){
-		runClient();
-	}
+	 TUI TUI = new TUI();
+
+
 	
 	public String getStringInput() {
 		String input = "";
@@ -37,31 +35,15 @@ public class IOControllerFTP {
 	}
 	
 	
-	public void startMessage(){
-		TUI.printMessage("#########################");
-		TUI.printMessage("welcome to out ftp-client");
-		TUI.printMessage("#########################");
-	}
 	
-	private void printTUIClient() {
-		TUI.printMessage("######################");
-		TUI.printMessage("Current options");
-		TUI.printMessage("1: recive file from FTP server");
-		TUI.printMessage("2 send command to zybo-board");
-		TUI.printMessage("3 send command to zybo-board");
-		TUI.printMessage("4 send command to zybo-board");
-		TUI.printMessage("5 send command to zybo-board");
-		TUI.printMessage("6 send command to zybo-board");
-		
-	}
-	
-	public void runClient(){
+	public int runClient(){
 		boolean run=true;
-		startMessage();
+		int cunt = 0;
+		TUI.startMessage();
 		while(run){
-		printTUIClient();
+		TUI.printTUIClient();
 		switch(getMainMenu()) {
-		case 1: System.out.println("recive file");
+		case 1: cunt = 1;
 				break;
 		case 2: System.out.println("no idea what to do");
 				break;
@@ -76,6 +58,7 @@ public class IOControllerFTP {
 		case 7: run=false;
 				break;
 		}}
+		return cunt;
 	}
 	
 	public int getMainMenu() {
@@ -104,12 +87,32 @@ public class IOControllerFTP {
 		} 
 		return output;
 	}
-	
-	public void printListOfFiles(){
+	public String getIP() throws IOException{
+		TUI.connect_ip();
+		return TUI.getResponse();
+	}
+
+
+	public int getPort() throws IOException {
+		TUI.connect_port();
+		return TUI.getIntResponse();
 		
 	}
-	public void IOControllerFTP() {
-		// TODO Auto-generated method stub
+
+	public String username() throws IOException {
+		TUI.username();
+		return TUI.getResponse();
 		
 	}
+
+	public String password() throws IOException {
+		TUI.password();
+		return TUI.getResponse();
+		
+	}
+
+	public void getListOfFiles(String fileList) {
+		System.out.println(fileList);
+	}
+
 }

@@ -4,17 +4,16 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import boundary_ftp.TUI;
+import ftp.IOControllerFTP;
 import ftp.Exceptions.NoInputException;
 
 public class newFTPClient implements IFTPClient{
@@ -22,6 +21,11 @@ public class newFTPClient implements IFTPClient{
 	DataOutputStream output;
 	BufferedReader input;
 	BufferedWriter writer;
+	InputStream input2;
+	TUI tui;
+	IOControllerFTP ioC = new IOControllerFTP();
+	
+
 	@Override
 	public void connect(String IP, int port) throws UnknownHostException, IOException, NoInputException {
 		if (IP.isEmpty())
@@ -86,7 +90,11 @@ public class newFTPClient implements IFTPClient{
 		 }
 		 BufferedInputStream input = new BufferedInputStream(socket.getInputStream());
 		 try{
-			copyStream(input, output);
+			 byte[] buffer = new byte[1024];
+		        int bytesRead;
+		        while((bytesRead=input.read(buffer))>0){
+		            output.write(buffer,0,bytesRead);
+		        }
 		 }
 		 finally
 		 {
@@ -135,21 +143,7 @@ public class newFTPClient implements IFTPClient{
 		return line;
 	}
 	
-	public void copyStream(InputStream input, OutputStream output){
-		try{
-			byte[] buffer = new byte[1024];
-	        int bytesRead;
-	        while((bytesRead=input.read(buffer))>0){
-	            output.write(buffer,0,bytesRead);
-	        }
-	        output.close();
-	        input.close();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
-	
-	public void getList(InputStream input) throws IOException{
+	public String getList(InputStream input2) throws IOException{
 		sendLine("PASV");
 		String response = readLine();
 		if(!response.startsWith("227 ")){
@@ -181,15 +175,53 @@ public class newFTPClient implements IFTPClient{
 			throw new IOException("couldn't receive list");
 		}
 			
-			ArrayList<String> list = new ArrayList();
-	
-			byte[] buffer = new byte[1024];
-	        int bytesRead;
-	        while((bytesRead=input.read(buffer))>0){
-	            output.write(buffer,0,bytesRead);
-	        }
-	        output.close();
-	        input.close();
-
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+ 
+		String line;
+		try {
+			br = new BufferedReader(new InputStreamReader(input2));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+		} catch (IOException e) {
+			System.out.println("shits gone gray");
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+        input.close();  
+    	return sb.toString();
+	}
+	public void connectAndLogin() throws IOException, NoInputException{
+		String ip = null;
+		int port = 0;
+		String user = null;
+		String pass = null;
+		boolean run = true;
+		ioC.getIP();
+		ioC.getPort();
+		ioC.username();
+		ioC.password();
+		connect(ip, port);
+		if(login(user, pass) == true){
+				switch(ioC.runClient()){
+				case 1:	ioC.getListOfFiles(getList(input2));
+//				case 2: doRandomShit
+//				case 3: doRandomShit2
+				}		
+		}
+		else{
+			tui.failedConnected();
+		}
+		
+	}
+	public void newFTPClient() throws IOException, NoInputException {
+		connectAndLogin();
 	}
 }
