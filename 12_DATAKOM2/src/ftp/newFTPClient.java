@@ -4,12 +4,15 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import ftp.Exceptions.NoInputException;
@@ -51,11 +54,6 @@ public class newFTPClient implements IFTPClient{
 	}
 	@Override
 	public boolean retrieveFile(String filename, OutputStream output) throws IOException {
-		// retrive command == RETR
-		
-		
-		
-		//først gå ind i passive mode
 		sendLine("PASV");
 		String response = readLine();
 		if(!response.startsWith("227 ")){
@@ -88,7 +86,7 @@ public class newFTPClient implements IFTPClient{
 		 }
 		 BufferedInputStream input = new BufferedInputStream(socket.getInputStream());
 		 try{
-			 copyStream();
+			copyStream(input, output);
 		 }
 		 finally
 		 {
@@ -137,8 +135,61 @@ public class newFTPClient implements IFTPClient{
 		return line;
 	}
 	
-	public void copyStream(){
-		
+	public void copyStream(InputStream input, OutputStream output){
+		try{
+			byte[] buffer = new byte[1024];
+	        int bytesRead;
+	        while((bytesRead=input.read(buffer))>0){
+	            output.write(buffer,0,bytesRead);
+	        }
+	        output.close();
+	        input.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
+	
+	public void getList(InputStream input) throws IOException{
+		sendLine("PASV");
+		String response = readLine();
+		if(!response.startsWith("227 ")){
+			throw new IOException("couldn't enter passive mode");
+		}
+		
+		  String ip = null;
+		    int port = -1;
+		    int opening = response.indexOf('(');
+		    int closing = response.indexOf(')', opening + 1);
+		    if (closing > 0) {
+		      String dataLink = response.substring(opening + 1, closing);
+		      StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+		      try {
+		        ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
+		            + tokenizer.nextToken() + "." + tokenizer.nextToken();
+		        port = Integer.parseInt(tokenizer.nextToken()) * 256
+		            + Integer.parseInt(tokenizer.nextToken());
+		      } catch (Exception e) {
+		        throw new IOException("couldn't connect probaly to:"
+		            + response);
+		      }
+		    }
+		
+		    
+		sendLine("NLST");
+		response = readLine();
+		if(!response.startsWith("150 ")){
+			throw new IOException("couldn't receive list");
+		}
+			
+			ArrayList<String> list = new ArrayList();
+	
+			byte[] buffer = new byte[1024];
+	        int bytesRead;
+	        while((bytesRead=input.read(buffer))>0){
+	            output.write(buffer,0,bytesRead);
+	        }
+	        output.close();
+	        input.close();
 
+	}
 }

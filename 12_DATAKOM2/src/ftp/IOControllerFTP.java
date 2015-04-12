@@ -104,7 +104,10 @@ public class IOControllerFTP {
 		} 
 		return output;
 	}
-
+	
+	public void printListOfFiles(){
+		
+	}
 	public void IOControllerFTP() {
 		// TODO Auto-generated method stub
 		
