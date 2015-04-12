@@ -33,7 +33,10 @@ public class Launch {
 		System.out.println("Operatør fundet på plads " + rigtigoperatoer);
 		
 		System.out.println("Så lad os ændre vægten på den vare: ");
-		System.out.println(Double.parseDouble(vareDB.get(rigtigvare).getRaavareWeight())-vareaendring);
+		Database nyAendring = new Database();
+		nyAendring.setRaavareWeight(String.valueOf(Double.parseDouble(vareDB.get(rigtigvare).getRaavareWeight())-vareaendring));
+		vareDB.set(rigtigvare, nyAendring);
+		System.out.println(vareDB.get(rigtigvare).getRaavareWeight());
 	}
 	
 }
