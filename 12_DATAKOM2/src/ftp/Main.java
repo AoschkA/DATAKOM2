@@ -1,10 +1,10 @@
 package ftp;
+import ftp.IOControllerFTP;
 
 public class Main {
-
+	static IOControllerFTP ftp = new IOControllerFTP();
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		ftp.IOControllerFTP();
 	}
 
 }
