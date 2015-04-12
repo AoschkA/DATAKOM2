@@ -5,8 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
-
 public class ReadFile {
+	BufferedReader inputreader;
 	private String path;
 
 	public ReadFile(String file_path){
