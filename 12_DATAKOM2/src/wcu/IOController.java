@@ -32,4 +32,23 @@ public class IOController {
 		}
 		return nyBase;
 	}
+	public ArrayList<Database> readOperatoerFil(){
+		
+		Database nyBasePost;
+		ArrayList<Database> nyBase = new ArrayList<Database>();
+		try {
+			current_Database_Fil = "data.text/operatoer.txt";
+			br = new BufferedReader(new FileReader(current_Database_Fil));
+			while((linje = br.readLine()) != null){
+				String[] tempDB = linje.split(csv_Character);
+				nyBasePost = new Database();
+				nyBasePost.setOprNr(Integer.parseInt(tempDB[0]));
+				nyBasePost.setOprName(tempDB[1]);
+				nyBase.add(nyBasePost);
+			}	
+		}catch(Exception e){
+			System.out.println("Show me I work!");
+		}
+		return nyBase;
+	}
 }
