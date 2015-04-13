@@ -1,14 +1,14 @@
-1,kogesalt,10.342
-2,svovl,7.234
-3,jernsulfat,18.934
-4,steriliseret vand,200.234
-5,saltsyre,7.321
-6,saltpetersyre,19.321
-7,natron,7.000
-8,klorhexidrin,3.123
-9,glucose,17.132
-10,sucrose,24.311
-11,vanadium pentaoxid,11.322
-12,kviksølv,8.123
-13,guldstøv,2.221
-14,mineralsalt,16.322
+1, kogesalt, 10.342
+2, svovl, 10.111
+3, jernsulfat, 18.934
+4, steriliseret vand, 200.234
+5, saltsyre, 7.321
+6, saltpetersyre, 19.321
+7, natron, 7.000
+8, klorhexidrin, 3.123
+9, glucose, 17.132
+10, sucrose, 24.311
+11, vanadium pentaoxid, 11.322
+12, kviksølv, 8.123
+13, guldstøv, 2.221
+14, mineralsalt, 16.322
