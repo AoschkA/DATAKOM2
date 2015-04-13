@@ -27,6 +27,7 @@ public class OprControl implements OperatoerDAO{
 	}
 
 	@Override
+	//	Skal Kigges på
 	public void updateOperatoer(OperatoerDTO oprID) {
 		for(int i = 0; i < oDB.size(); i++){
 			if(oprID.getOprID() == oDB.get(i).getOprID()){
@@ -40,18 +41,30 @@ public class OprControl implements OperatoerDAO{
 	public ArrayList<OperatoerDTO> getOperatoerList() {
 		return oDB;
 	}
+
 	@Override
+	//	Skal kigges på
 	public void createOperatoer(ArrayList<OperatoerDTO> oprDB, OperatoerDTO opr) {
-		// TODO Auto-generated method stub
-
+		for(int i = 0; i < oDB.size(); i ++){
+			if(opr.getOprID() != oDB.get(i).getOprID()){
+				oprDB.add(i, opr);
+				operatoerFil.writeOperatoerDB(oDB);
+			}
+		}
+		
 	}
 
 	@Override
+
 	public void deleteOperatoer(int oprID) {
-		// TODO Auto-generated method stub
-
+		for(int i = 0; i < oDB.size(); i++){
+			if(oprID == oDB.get(i).oprID){
+				oDB.remove(i);
+				operatoerFil.writeOperatoerDB(oDB);
+			}
+		}
 	}
-
 }
+
 
 
