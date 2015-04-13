@@ -31,7 +31,6 @@ public class newFTPClient implements IFTPClient{
 	Socket socket;
 	DataOutputStream output;
 	InputStream input;
-	BufferedWriter writer;
 	BufferedReader reader;
 	TUI tui = new TUI();
 	IOControllerFTP ioC = new IOControllerFTP();
@@ -46,28 +45,27 @@ public class newFTPClient implements IFTPClient{
 
 		socket = new Socket(ip, port);
 	    reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	    writer = new BufferedWriter(
-	        new OutputStreamWriter(socket.getOutputStream()));
+	    output = new DataOutputStream(socket.getOutputStream());
 		return true;
 		
 	}
 	@Override
 	public boolean login(String username, String password) throws IOException {
 		try{
-		writeLine("TYPE I");
 		String response = readLine();
-		if(response.startsWith("200 "))	{
+		System.out.println(response);
 			writeLine("USER " + username);
-			response =  readLine();
+			response = readLine();
+			System.out.println(response);
 			if(!response.startsWith("331 ")){
 				throw new IOException("User error");
 			}
 			writeLine("PASS " + password);
-
 			response = readLine();
+			System.out.println(response);
 			if(!response.startsWith("230 ")){
 				throw new IOException("Password error");
-			}}
+			}
 		return true;
 		} catch (Exception e){
 			return false;
@@ -136,19 +134,15 @@ public class newFTPClient implements IFTPClient{
 		}
 		return false;
 	}
-	@Override
-	public void disconnect() {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
 	public void writeLine(String line) throws IOException{
 		if(socket == null){
 			throw new IOException("ikke connected");
 		}
 		try{
-			writer.write(line + "\r\n");
-			writer.flush();
+			output.writeBytes(line + "\n");
+			output.flush();
 		}catch(IOException e){
 			socket = null;
 			throw e;
