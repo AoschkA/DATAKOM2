@@ -1,4 +1,4 @@
-package wcu;
+package boundary;
 
 public interface IWCU {
 

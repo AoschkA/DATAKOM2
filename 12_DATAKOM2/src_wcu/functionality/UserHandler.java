@@ -1,4 +1,4 @@
-package wcu;
+package functionality;
 
 public class UserHandler {
 

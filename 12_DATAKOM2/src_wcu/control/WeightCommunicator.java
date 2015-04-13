@@ -1,4 +1,4 @@
-package wcu;
+package control;
 
 public class WeightCommunicator {
 

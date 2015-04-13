@@ -1,4 +1,4 @@
-package wcu;
+package data;
 
 public class Database {
 
