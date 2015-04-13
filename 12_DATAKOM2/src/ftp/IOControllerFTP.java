@@ -44,11 +44,13 @@ public class IOControllerFTP {
 		TUI.printTUIClient();
 		switch(getMainMenu()) {
 		case 1: cunt = 1;
-				return cunt;
+				run =false;
+				break;
 		case 2: cunt = 2;
 				run = false;
-				return cunt;
+				break;
 		case 3: cunt = 3;
+				run=false;
 				break;
 		case 4: System.out.println("no idea what to do");
 				break;
