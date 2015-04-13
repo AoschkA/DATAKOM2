@@ -252,13 +252,15 @@ public class newFTPClient implements IFTPClient{
 		
 	}
 	private void typeFile() throws IOException {
-		tui.printMessage("Please enter which file you wish to download");
+		tui.printMessage("Please enter the name of the file you wish to download");
+		tui.printMessage("Or type 'back' to go back to the main menu");
 		String fileToDownload = "/" + ioC.getStringInput();
-		tui.printMessage("please enter name of user folder");
+		if (!fileToDownload.equals("back")){
         File downloadFile1 = new File("C:/Users/" + ioC.getStringInput() + "/" + fileToDownload);
         OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
         retrieveFile(fileToDownload, outputStream1);
 		outputStream1.close();
+		} 
 		
 	}
 	public void newFTPClient() throws IOException, NoInputException, InterruptedException {

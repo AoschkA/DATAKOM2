@@ -2,6 +2,7 @@ package ftp;
 
 import java.io.IOException;
 
+import ftp.Exceptions.InvalidInputException;
 import boundary_ftp.TUI;
 
 public class IOControllerFTP {
@@ -103,6 +104,15 @@ public class IOControllerFTP {
 		TUI.username();
 		return TUI.getResponse();
 		
+	}
+	
+	public int getDestination() throws IOException, InvalidInputException {
+		int n = TUI.getIntResponse();
+		switch (n) {
+		case 1: return 1;
+		case 2: return 2;
+		default: throw new InvalidInputException();
+		}
 	}
 
 	public String password() throws IOException {
