@@ -252,8 +252,10 @@ public class newFTPClient implements IFTPClient{
 		
 	}
 	private void typeFile() throws IOException {
+		tui.printMessage("Please enter which file you wish to download");
 		String fileToDownload = "/" + ioC.getStringInput();
-        File downloadFile1 = new File("C:/Users/" + fileToDownload);
+		tui.printMessage("please enter name of user folder");
+        File downloadFile1 = new File("C:/Users/" + ioC.getStringInput() + "/" + fileToDownload);
         OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
         retrieveFile(fileToDownload, outputStream1);
 		outputStream1.close();
