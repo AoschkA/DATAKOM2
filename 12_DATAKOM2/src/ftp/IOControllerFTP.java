@@ -44,6 +44,7 @@ public class IOControllerFTP {
 		TUI.printTUIClient();
 		switch(getMainMenu()) {
 		case 1: cunt = 1;
+				run = false;
 				break;
 		case 2: System.out.println("no idea what to do");
 				break;
@@ -58,6 +59,7 @@ public class IOControllerFTP {
 		case 7: run=false;
 				break;
 		}}
+		
 		return cunt;
 	}
 	

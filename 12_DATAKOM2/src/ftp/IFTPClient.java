@@ -13,6 +13,4 @@ public interface IFTPClient {
 	boolean login(String username, String password) throws IOException;
 	boolean retrieveFile(String filename, OutputStream lokal) throws IOException;
 	boolean logout();
-	void disconnect();
-
 }
