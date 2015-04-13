@@ -90,7 +90,7 @@ public class FileHandler implements IFileHandler {
 		LogDTO nyLBasePost;
 		ArrayList<LogDTO> nyLBase = new ArrayList<LogDTO>();
 		try {
-			br = new BufferedReader(new FileReader(current_operatoer_File));
+			br = new BufferedReader(new FileReader(current_Log_File));
 			while((linje = br.readLine()) != null){
 				String[] tempDB = linje.split(csv_Character);
 				nyLBasePost = new LogDTO();
@@ -107,15 +107,24 @@ public class FileHandler implements IFileHandler {
 			System.out.println("Show me I work!");
 		}
 		return nyLBase;
-		
+
 	}
 
 	@Override
 	public void writeLogDB(ArrayList<LogDTO> logDB) {
-		// TODO Auto-generated method stub
-		
+		try {
+			BufferedWriter writer = 
+					new BufferedWriter (new FileWriter(current_Log_File));
+			for(int i = 0;i <logDB.size();i++){
+				writer.write(logDB.get(i).getDato() + ", " + logDB.get(i).getTime() + 
+						logDB.get(i).getOprID() + ", " + logDB.get(i).getRaavareID() + 
+						", " + logDB.get(i).getAfvejning() + ", " + logDB.get(i).getPaa_lager() + "\n");
+			}
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
 }
 
 
