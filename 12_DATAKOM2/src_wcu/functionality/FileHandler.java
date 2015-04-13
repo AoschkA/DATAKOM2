@@ -7,6 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import data.LogDTO;
+import data.OperatoerDTO;
+import data.RaavareDTO;
+
 
 public class FileHandler implements IFileHandler {
 	String csv_Character = ",";

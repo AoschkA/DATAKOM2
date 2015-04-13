@@ -1,4 +1,4 @@
-package functionality;
+package data;
 
 public class RaavareDTO {
 

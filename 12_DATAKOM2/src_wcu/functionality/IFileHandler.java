@@ -2,6 +2,10 @@ package functionality;
 
 import java.util.ArrayList;
 
+import data.LogDTO;
+import data.OperatoerDTO;
+import data.RaavareDTO;
+
 public interface IFileHandler {
 
 	ArrayList<OperatoerDTO> readOperatoerDB();

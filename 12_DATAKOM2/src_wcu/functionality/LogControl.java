@@ -2,6 +2,11 @@ package functionality;
 
 import java.util.ArrayList;
 
+import data.LogDAO;
+import data.LogDTO;
+import data.OperatoerDTO;
+import data.RaavareDTO;
+
 public class LogControl implements LogDAO{
 	FileHandler fh = new FileHandler();
 	LogDTO logEntry;

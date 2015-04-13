@@ -2,6 +2,9 @@ package functionality;
 
 import java.util.ArrayList;
 
+import data.OperatoerDAO;
+import data.OperatoerDTO;
+
 public class OprControl implements OperatoerDAO{
 
 	FileHandler operatoerFil;
@@ -53,7 +56,7 @@ public class OprControl implements OperatoerDAO{
 
 	public void deleteOperatoer(int oprID) {
 		for(int i = 0; i < oDB.size(); i++){
-			if(oprID == oDB.get(i).oprID){
+			if(oprID == oDB.get(i).getOprID()){
 				oDB.remove(i);
 				operatoerFil.writeOperatoerDB(oDB);
 			}

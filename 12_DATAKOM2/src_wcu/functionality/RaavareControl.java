@@ -2,6 +2,9 @@ package functionality;
 
 import java.util.ArrayList;
 
+import data.RaavareDAO;
+import data.RaavareDTO;
+
 public class RaavareControl implements RaavareDAO {
 	
 	FileHandler raavareFil;
