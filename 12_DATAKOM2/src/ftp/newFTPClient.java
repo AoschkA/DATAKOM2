@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
 import boundary_ftp.TUI;
+import ftp.Exceptions.InvalidInputException;
 import ftp.Exceptions.NoInputException;
 
 public class newFTPClient implements IFTPClient{
@@ -256,13 +257,28 @@ public class newFTPClient implements IFTPClient{
 		
 	}
 	private void typeFile() throws IOException {
-		tui.printMessage("Please enter which file you wish to download");
+		tui.printMessage("Please enter the name of the file you wish to download");
+		tui.printMessage("Or type 'back' to go back to the main menu");
 		String fileToDownload = "/" + ioC.getStringInput();
-		tui.printMessage("please enter name of user folder");
-        File downloadFile1 = new File("C:/Users/" + ioC.getStringInput() + "/" + fileToDownload);
-        OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
-        retrieveFile(fileToDownload, outputStream1);
-		outputStream1.close();
+		if (!fileToDownload.equals("back")){
+			tui.printMessage("Press '1': Choose the download location");
+			tui.printMessage("Press '2': Locate the file in your user folder");
+			int n = ioC.getDestination();
+		if (n==1) {
+			tui.printMessage("Enter the desired download location");
+			File downloadFile1 = new File(ioC.getStringInput() + "/" + fileToDownload);
+	        OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
+	        retrieveFile(fileToDownload, outputStream1);
+			outputStream1.close();
+		}
+		if (n==2){
+			tui.printMessage("Enter the name of your user folder");
+			File downloadFile1 = new File("C:/Users/" + ioC.getStringInput() + "/" + fileToDownload);
+			OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
+			retrieveFile(fileToDownload, outputStream1);
+			outputStream1.close();
+		}
+		} 
 		
 	}
 	public void newFTPClient() throws IOException, NoInputException, InterruptedException {
