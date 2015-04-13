@@ -202,7 +202,7 @@ public class newFTPClient implements IFTPClient{
 					sb.append(line + "\n"  );
 				}
 			} catch (IOException e) {
-				System.out.println("shits gone gray");
+				e.printStackTrace();
 			} finally {
 				if (br != null) {
 					try {
@@ -214,7 +214,7 @@ public class newFTPClient implements IFTPClient{
 			}
 	    	return sb.toString();
 			}}catch(IOException e){
-				System.out.println("what the fuck");
+				e.printStackTrace();
 			}
 		return "shits gray";
 	}
@@ -242,7 +242,7 @@ public class newFTPClient implements IFTPClient{
 					case 2: logout();
 					run = false;
 					break;
-					case 3: tui.printMessage(getList());
+					case 3: ioC.getListOfFiles(getList());
 					break;
 					}		
 		}}
