@@ -1,10 +1,12 @@
 package ftp;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -244,6 +246,8 @@ public class newFTPClient implements IFTPClient{
 					break;
 					case 3: ioC.getListOfFiles(getList());
 					break;
+					case 4: sendTypeFile();
+					break;
 					}		
 		}}
 		else{
@@ -266,10 +270,78 @@ public class newFTPClient implements IFTPClient{
 	public void newFTPClient() throws IOException, NoInputException, InterruptedException {
 		connectAndLogin();
 	}
-	@Override
-	public boolean sendFile() throws IOException {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		
+	public void sendTypeFile() throws IOException{
+		String fileToUpload = "/" + ioC.getStringInput();
+        File downloadFile1 = new File("C:/Users/" + ioC.getStringInput() + "/" + fileToUpload);
+        stor(downloadFile1);
 
+	}
+	public synchronized boolean stor(File file) throws IOException {
+	    if (file.isDirectory()) {
+	      throw new IOException("SimpleFTP cannot upload a directory.");
+	    }
+
+	    String filename = file.getName();
+
+	    return sendFile(new FileInputStream(file), filename);
+	  }
+	
+	@Override
+	public boolean sendFile(InputStream inputStream, String filename) throws IOException {
+		  
+			    BufferedInputStream input = new BufferedInputStream(inputStream);
+
+			    writeLine("PASV");
+			    String response = readLine();
+			    if (!response.startsWith("227 ")) {
+			      throw new IOException("SimpleFTP could not request passive mode: "
+			          + response);
+			    }
+
+			    String ip = null;
+			    int port = -1;
+			    int opening = response.indexOf('(');
+			    int closing = response.indexOf(')', opening + 1);
+			    if (closing > 0) {
+			      String dataLink = response.substring(opening + 1, closing);
+			      StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+			      try {
+			        ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
+			            + tokenizer.nextToken() + "." + tokenizer.nextToken();
+			        port = Integer.parseInt(tokenizer.nextToken()) * 256
+			            + Integer.parseInt(tokenizer.nextToken());
+			      } catch (Exception e) {
+			        throw new IOException("SimpleFTP received bad data link information: "
+			            + response);
+			      }
+			    }
+
+			    writeLine("STOR " + filename);
+
+			    Socket dataSocket = new Socket(ip, port);
+
+			    response = readLine();
+			    if (!response.startsWith ("150 ")) {
+			    //if (!response.startsWith("150 ")) {
+			      throw new IOException("SimpleFTP was not allowed to send the file: "
+			          + response);
+			    }
+
+			    BufferedOutputStream output = new BufferedOutputStream(dataSocket
+			        .getOutputStream());
+			    byte[] buffer = new byte[4096];
+			    int bytesRead = 0;
+			    while ((bytesRead = input.read(buffer)) != -1) {
+			      output.write(buffer, 0, bytesRead);
+			    }
+			    output.flush();
+			    output.close();
+			    input.close();
+
+			    response = readLine();
+			    return response.startsWith("226 ");
+			  }
+	
 }
+
