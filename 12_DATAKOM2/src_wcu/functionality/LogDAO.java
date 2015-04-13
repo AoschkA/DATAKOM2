@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public interface LogDAO {
 	
-	public void registerLogOn(OperatoerDTO oprID);
-	public void registerAfvejning(RaavareDTO raavareWeight);
+	public void registerLogEntry(OperatoerDTO oprID, RaavareDTO raavare, String afvejning);
 	public ArrayList<LogDTO> getLogList();
-
 }

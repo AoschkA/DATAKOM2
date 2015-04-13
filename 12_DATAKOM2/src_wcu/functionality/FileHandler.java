@@ -95,11 +95,10 @@ public class FileHandler implements IFileHandler {
 				String[] tempDB = linje.split(csv_Character);
 				nyLBasePost = new LogDTO();
 				nyLBasePost.setDato(tempDB[0]);
-				nyLBasePost.setTime(tempDB[1]);
-				nyLBasePost.setOprID(Integer.parseInt(tempDB[2]));
-				nyLBasePost.setRaavareID(Integer.parseInt(tempDB[3]));
-				nyLBasePost.setAfvejning(tempDB[4]);
-				nyLBasePost.setPaa_lager(tempDB[5]);
+				nyLBasePost.setOprID(Integer.parseInt(tempDB[1]));
+				nyLBasePost.setRaavareID(Integer.parseInt(tempDB[2]));
+				nyLBasePost.setAfvejning(tempDB[3]);
+				nyLBasePost.setPaa_lager(tempDB[4]);
 				nyLBase.add(nyLBasePost);
 			}
 		}
@@ -111,17 +110,14 @@ public class FileHandler implements IFileHandler {
 	}
 
 	@Override
-	public void writeLogDB(ArrayList<LogDTO> logDB) {
+	public void writeLogDB(LogDTO logEntry) {
 		try {
 			BufferedWriter writer = 
-					new BufferedWriter (new FileWriter(current_Log_File));
-			for(int i = 0;i <logDB.size();i++){
-				writer.write(logDB.get(i).getDato() + ", " + logDB.get(i).getTime() + 
-						logDB.get(i).getOprID() + ", " + logDB.get(i).getRaavareID() + 
-						", " + logDB.get(i).getAfvejning() + ", " + logDB.get(i).getPaa_lager() + "\n");
-			}
-			writer.close();
-		} catch (IOException e) {
+					new BufferedWriter (new FileWriter(current_Log_File, true));
+				writer.write(logEntry.getDato() + ", " + logEntry.getOprID() + ", " + logEntry.getRaavareID() + 
+						", " + logEntry.getAfvejning() + ", " + logEntry.getPaa_lager() + "\n");
+				writer.close();
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

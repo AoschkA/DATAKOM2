@@ -1,40 +1,34 @@
 package functionality;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class LogDTO {
 	
 	private String dato;
-	private String time;
 	private int oprID;
 	private int raavareID;
 	private String afvejning;
 	private String paa_lager;
 	
 	public LogDTO() {
-		this.dato = "";
-		this.time = "";
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		this.dato = dateFormat.format(date);
 		this.oprID = 0;
 		this.raavareID = 0;
 		this.afvejning = "";
 		this.paa_lager = "";
-		
 	}
 
 	public String getDato() {
 		return dato;
 	}
-
-	public void setDato(String dato) {
+	
+	public void setDato(String dato){
 		this.dato = dato;
 	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String time) {
-		this.time = time;
-	}
-
 	public int getOprID() {
 		return oprID;
 	}
