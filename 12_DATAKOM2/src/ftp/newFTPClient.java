@@ -13,7 +13,6 @@ import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
 import boundary_ftp.TUI;
-import ftp.IOControllerFTP;
 import ftp.Exceptions.NoInputException;
 
 public class newFTPClient implements IFTPClient{
@@ -27,26 +26,27 @@ public class newFTPClient implements IFTPClient{
 	
 
 	@Override
-	public void connect(String IP, int port) throws UnknownHostException, IOException, NoInputException {
-		if (IP.isEmpty())
+	public boolean connect(String IP, int port) throws UnknownHostException, IOException, NoInputException {
+		if (IP.isEmpty()){
 			throw new NoInputException();
-		
+		}
 		socket = new Socket(IP, port);
 		output = new DataOutputStream(socket.getOutputStream());
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		
+		return true;
 		
 	}
 	@Override
 	public boolean login(String username, String password) throws IOException {
 		try{
-		sendLine("USER " + username);
+		writeLine("USER " + username);
 		
 		String response =  readLine();
 		if(!response.startsWith("331 ")){
 			throw new IOException("User error");
 		}
-		sendLine("PASS " + password);
+		writeLine("PASS " + password);
 		response = readLine();
 		if(!response.startsWith("230 ")){
 			throw new IOException("Password error");
@@ -58,7 +58,7 @@ public class newFTPClient implements IFTPClient{
 	}
 	@Override
 	public boolean retrieveFile(String filename, OutputStream output) throws IOException {
-		sendLine("PASV");
+		writeLine("PASV");
 		String response = readLine();
 		if(!response.startsWith("227 ")){
 			throw new IOException("couldn't enter passive mode");
@@ -82,7 +82,7 @@ public class newFTPClient implements IFTPClient{
 		      }
 		    }
 		    
-		 sendLine("RETR " + filename);
+		 writeLine("RETR " + filename);
 		 Socket socket = new Socket(ip, port);
 		 response= readLine();
 		 if(!response.startsWith("125 ")){
@@ -106,7 +106,7 @@ public class newFTPClient implements IFTPClient{
 	@Override
 	public boolean logout() {
 		try{
-			sendLine("QUIT");
+			writeLine("QUIT");
 			String response = readLine();
 			
 			if(!response.startsWith("231")){
@@ -125,7 +125,7 @@ public class newFTPClient implements IFTPClient{
 		
 	}
 	
-	public void sendLine(String line) throws IOException{
+	public void writeLine(String line) throws IOException{
 		if(socket == null){
 			throw new IOException("ikke connected");
 		}
@@ -144,7 +144,7 @@ public class newFTPClient implements IFTPClient{
 	}
 	
 	public String getList(InputStream input2) throws IOException{
-		sendLine("PASV");
+		writeLine("PASV");
 		String response = readLine();
 		if(!response.startsWith("227 ")){
 			throw new IOException("couldn't enter passive mode");
@@ -169,7 +169,7 @@ public class newFTPClient implements IFTPClient{
 		    }
 		
 		    
-		sendLine("NLST");
+		writeLine("NLST");
 		response = readLine();
 		if(!response.startsWith("150 ")){
 			throw new IOException("couldn't receive list");
@@ -205,10 +205,14 @@ public class newFTPClient implements IFTPClient{
 		String pass = null;
 		boolean run = true;
 		ioC.getIP();
-		ioC.getPort();
+		if(ioC.getPort() == -1){
+			System.exit(0);
+		}
 		ioC.username();
 		ioC.password();
-		connect(ip, port);
+		if(connect(ip, port) == false){
+			tui.failedConnected();
+		}
 		if(login(user, pass) == true){
 				switch(ioC.runClient()){
 				case 1:	ioC.getListOfFiles(getList(input2));
