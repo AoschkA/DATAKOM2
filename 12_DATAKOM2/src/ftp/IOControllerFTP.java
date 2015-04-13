@@ -43,40 +43,40 @@ public class IOControllerFTP {
 		while(run){
 		TUI.printTUIClient();
 		switch(getMainMenu()) {
-		case "1": cunt = 1;
+		case 1: cunt = 1;
 				return cunt;
-		case "2": cunt = 2;
+		case 2: cunt = 2;
 				run = false;
 				return cunt;
-		case "3": System.out.println("no idea what to do");
+		case 3: cunt = 3;
 				break;
-		case "4": System.out.println("no idea what to do");
+		case 4: System.out.println("no idea what to do");
 				break;
-		case "5": System.out.println("no idea what to do");
+		case 5: System.out.println("no idea what to do");
 				break;
-		case "6": System.out.println("no idea what to do");
+		case 6: System.out.println("no idea what to do");
 				break;
 		}}
 		
 		return cunt;
 	}
 	
-	public String getMainMenu() {
+	public int getMainMenu() {
 		String input = getStringInput();
-		String output = "0";
+		int output = 0;
 		try {
 		switch(input) {
-		case "1": output = "1";
+		case "1": output = 1;
 		break;
-		case "2": output = "2";
+		case "2": output = 2;
 		break;
-		case "3": output = "3";
+		case "3": output = 3;
 		break;
-		case "4": output = "4";
+		case "4": output = 4;
 		break;
-		case "5": output = "5";
+		case "5": output = 5;
 		break;
-		case "6": output = "6";
+		case "6": output = 6;
 		break;
 		default: throw new IOException();
 		} } catch (IOException e) {

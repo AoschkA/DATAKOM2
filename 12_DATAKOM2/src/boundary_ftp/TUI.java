@@ -40,7 +40,7 @@ public class TUI implements IUI {
 		System.out.println("Current options");
 		System.out.println("1: recive file from FTP server");
 		System.out.println("2: logout");
-		System.out.println("3: send command to zybo-board");
+		System.out.println("3: get list of files");
 		System.out.println("4: send command to zybo-board");
 		System.out.println("5: send command to zybo-board");
 		System.out.println("6: send command to zybo-board");
