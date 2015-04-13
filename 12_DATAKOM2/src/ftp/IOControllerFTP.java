@@ -107,12 +107,15 @@ public class IOControllerFTP {
 		
 	}
 	
-	public int getDestination() throws IOException, InvalidInputException {
+	public int getDestination() throws IOException {
 		int n = TUI.getIntResponse();
+		try {
 		switch (n) {
 		case 1: return 1;
 		case 2: return 2;
 		default: throw new InvalidInputException();
+		}} catch (InvalidInputException e) {
+			return getDestination();
 		}
 	}
 
