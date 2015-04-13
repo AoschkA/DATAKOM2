@@ -14,10 +14,10 @@ public class test2 {
 	static newFTPClient ftpC = new newFTPClient();
 	
 	public static void main(String args[]) throws UnknownHostException, IOException, NoInputException, InterruptedException{
-		ftpC.connect("130.226.21.129",21);
-		ftpC.login("modbus","336699");
-		String remoteFile1 = "/best.txt";
-        File downloadFile1 = new File("C:/Users/Mads/best.txt");
+		ftpC.connect("kaare8p2.noip.me",21);
+		ftpC.login("toby","test");
+		String remoteFile1 = "/PENIS2.txt";
+        File downloadFile1 = new File("C:/Users/Juste/PENIS2.txt");
         OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
 		ftpC.retrieveFile(remoteFile1, outputStream1);
 		outputStream1.close();

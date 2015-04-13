@@ -72,7 +72,7 @@ public class newFTPClient implements IFTPClient{
 		writeLine("PASV");
 		response = readLine();
 		if(!response.startsWith("227 ")){
-			throw new IOException("couldn't enter passive mode");
+			throw new IOException("couldn't enter passive mode" + response);
 		}
 		
 		  String ip = null;
@@ -98,7 +98,7 @@ public class newFTPClient implements IFTPClient{
 		 response= readLine();
 		 System.out.println(response);
 		 if(!response.startsWith("150 ")){
-			 throw new IOException("coundn't send file");
+			 throw new IOException("coundn't send file" + response);
 		 }
 		 DataInputStream input = new DataInputStream(socket.getInputStream());
 		 
@@ -110,15 +110,15 @@ public class newFTPClient implements IFTPClient{
 		        }
 		        input.close();
 		        tui.printMessage("Download done");
+		        socket.close();
 		 }catch(IOException e){
 			 input.close();
+			 socket.close();
 			 }}
 		 }
 		 finally
 		 {
-			 
-			
-			socket.close();
+
 		 }
 		return false;
 	}
@@ -321,7 +321,6 @@ public class newFTPClient implements IFTPClient{
 
 			    response = readLine();
 			    if (!response.startsWith ("150 ")) {
-			    //if (!response.startsWith("150 ")) {
 			      throw new IOException("SimpleFTP was not allowed to send the file: "
 			          + response);
 			    }
@@ -338,6 +337,7 @@ public class newFTPClient implements IFTPClient{
 			    input.close();
 
 			    response = readLine();
+			    tui.printMessage(response);
 			    return response.startsWith("226 ");
 			  }
 	
