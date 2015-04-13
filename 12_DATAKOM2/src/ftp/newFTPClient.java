@@ -264,5 +264,10 @@ public class newFTPClient implements IFTPClient{
 	public void newFTPClient() throws IOException, NoInputException, InterruptedException {
 		connectAndLogin();
 	}
+	@Override
+	public boolean sendFile() throws IOException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
