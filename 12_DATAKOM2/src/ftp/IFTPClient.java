@@ -2,6 +2,7 @@ package ftp;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 import ftp.Exceptions.NoInputException;

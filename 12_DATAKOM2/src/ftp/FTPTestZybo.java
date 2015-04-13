@@ -15,7 +15,7 @@ public class FTPTestZybo {
   
   try {  
    // pass directory path on server to connect  
-	  ftpClient.connect("192.168.0.18", 21);
+	  ftpClient.connect("130.226.21.129", 21);
   
    // pass username and password, returned true if authentication is  
    // successful  
@@ -47,7 +47,7 @@ public class FTPTestZybo {
     }
     
     // Download file
-    fos = new FileOutputStream("C:/Users/Alexander/Documents/download.txt");  
+    fos = new FileOutputStream("C:/Users/Mads/Desktop");  
     boolean download = ftpClient.retrieveFile("newfile.txt",  
       fos);  
     if (download) {  
