@@ -1,6 +1,7 @@
 package ftp;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
 
@@ -12,6 +13,6 @@ public interface IFTPClient {
 	boolean login(String username, String password) throws IOException;
 	boolean retrieveFile(String filename, OutputStream output) throws IOException;
 	boolean logout();
-	boolean sendFile() throws IOException;
+	boolean sendFile(InputStream inputStream, String filename) throws IOException;
 
 }

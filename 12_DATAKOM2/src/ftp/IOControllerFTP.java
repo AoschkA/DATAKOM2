@@ -52,7 +52,8 @@ public class IOControllerFTP {
 		case 3: cunt = 3;
 				run=false;
 				break;
-		case 4: System.out.println("no idea what to do");
+		case 4: cunt = 4;
+				run = false;
 				break;
 		case 5: System.out.println("no idea what to do");
 				break;
