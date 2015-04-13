@@ -1,7 +1,6 @@
 package ftp;
 import java.io.IOException;
 
-import ftp.IOControllerFTP;
 import ftp.Exceptions.NoInputException;
 
 public class Main {
