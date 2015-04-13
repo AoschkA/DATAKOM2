@@ -85,11 +85,24 @@ public class FileHandler implements IFileHandler {
 		}
 	}
 
-	@Override
-	public ArrayList<LogDTO> readLogDB() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public ArrayList<LogDTO> readLogDB() {
+//		LogDTO nyLBasePost;
+//		ArrayList<OperatoerDTO> nyLBase = new ArrayList<OperatoerDTO>();
+//		try {
+//			br = new BufferedReader(new FileReader(current_operatoer_File));
+//			while((linje = br.readLine()) != null){
+//				String[] tempDB = linje.split(csv_Character);
+//				nyLBasePost = new LogDTO();
+//				nyLBasePost.setDato(Double.parseDouble(tempDB[0]));
+//				nyLBasePost.setOprName(tempDB[1]);
+//				nyLBase.add(nyLBasePost);
+//			}
+//		}catch(Exception e){
+//			System.out.println("Show me I work!");
+//		}
+//		return nyOBase;
+//	}
 
 	@Override
 	public void writeLogDB(ArrayList<LogDTO> logDB) {
