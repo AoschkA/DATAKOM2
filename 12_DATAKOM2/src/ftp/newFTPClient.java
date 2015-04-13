@@ -1,28 +1,15 @@
 package ftp;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
-
-
-
-
-
-
-
-
-
-
-
 
 import boundary_ftp.TUI;
 import ftp.Exceptions.NoInputException;
@@ -34,7 +21,7 @@ public class newFTPClient implements IFTPClient{
 	BufferedReader reader;
 	TUI tui = new TUI();
 	IOControllerFTP ioC = new IOControllerFTP();
-	private static boolean DEBUG = false;
+
 	
 
 	@Override
@@ -73,8 +60,12 @@ public class newFTPClient implements IFTPClient{
 	}
 	@Override
 	public boolean retrieveFile(String filename, OutputStream output) throws IOException {
-		writeLine("PASV");
+		try{
+		writeLine("TYPE I");
 		String response = readLine();
+		if(response.startsWith("200 "))	{
+		writeLine("PASV");
+		response = readLine();
 		if(!response.startsWith("227 ")){
 			throw new IOException("couldn't enter passive mode");
 		}
@@ -100,20 +91,30 @@ public class newFTPClient implements IFTPClient{
 		 writeLine("RETR " + filename);
 		 
 		 response= readLine();
-		 if(!response.startsWith("125 ")){
+		 System.out.println(response);
+		 if(!response.startsWith("150 ")){
 			 throw new IOException("coundn't send file");
 		 }
-		 BufferedInputStream input = new BufferedInputStream(socket.getInputStream());
+		 DataInputStream input = new DataInputStream(socket.getInputStream());
+		 System.out.println("ad");
+		 
 		 try{
 			 byte[] buffer = new byte[1024];
 		        int bytesRead;
 		        while((bytesRead=input.read(buffer))>0){
 		            output.write(buffer,0,bytesRead);
+		            System.out.println("a");
 		        }
+		        input.close();
+		 }catch(IOException e){
+			 input.close();
+			 System.out.println("fuck this shit");
+			 }}
 		 }
 		 finally
 		 {
-			input.close();
+			 
+			
 			socket.close();
 		 }
 		return false;
@@ -124,7 +125,7 @@ public class newFTPClient implements IFTPClient{
 			writeLine("QUIT");
 			String response = readLine();
 			
-			if(!response.startsWith("231")){
+			if(!response.startsWith("221")){
 				throw new IOException("User not logged out");
 			}else{
 				System.out.println("User has been disconnected");
@@ -155,18 +156,13 @@ public class newFTPClient implements IFTPClient{
 	}
 
 	public String getList() throws IOException, InterruptedException{
-	System.out.println("fuck this shit");
 		try{
 			writeLine("TYPE I");
 			String response = readLine();
 			if(response.startsWith("200 "))	{
-		
 			writeLine("PASV");
-			System.out.println("fuck this shit");
 			 response = readLine();
-			 System.out.println("fuck this shit");
 			if(!response.startsWith("227 ")){
-				System.out.println("fuck this shit " + response);
 				throw new IOException("couldn't enter passive mode: " + response);
 			}
 			
@@ -189,7 +185,7 @@ public class newFTPClient implements IFTPClient{
 			    }
 			
 			Socket socket = new Socket(ip, port); 
-			writeLine("NLST");
+			writeLine("LIST -R");
 			response = readLine();
 			if(!response.startsWith("150 ")){
 				throw new IOException("couldn't receive list");
@@ -202,7 +198,7 @@ public class newFTPClient implements IFTPClient{
 			try {
 				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				while ((line = br.readLine()) != null) {
-					sb.append(line);
+					sb.append(line + "\n"  );
 				}
 			} catch (IOException e) {
 				System.out.println("shits gone gray");
@@ -215,8 +211,6 @@ public class newFTPClient implements IFTPClient{
 					}
 				}
 			}
-			
-	        input.close();  
 	    	return sb.toString();
 			}}catch(IOException e){
 				System.out.println("what the fuck");
@@ -241,10 +235,10 @@ public class newFTPClient implements IFTPClient{
 		}
 		if(login(user, pass) == true){
 				switch(ioC.runClient()){
-				case 1:	getList();
-//				case 2: doRandomShit
-//				case 3: doRandomShit2
-				}		
+					case 1:	System.out.println(getList());
+				//	case 2: logout();
+				//	case 3: doRandomShit2
+					}		
 		}
 		else{
 			tui.failedConnected();
@@ -254,4 +248,5 @@ public class newFTPClient implements IFTPClient{
 	public void newFTPClient() throws IOException, NoInputException, InterruptedException {
 		connectAndLogin();
 	}
+
 }
