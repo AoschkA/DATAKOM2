@@ -8,9 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
+
+
+
+
 
 import boundary_ftp.TUI;
 import ftp.Exceptions.NoInputException;
@@ -20,37 +25,52 @@ public class newFTPClient implements IFTPClient{
 	DataOutputStream output;
 	BufferedReader input;
 	BufferedWriter writer;
-	InputStream input2;
-	TUI tui;
+	BufferedReader input2;
+	TUI tui = new TUI();
 	IOControllerFTP ioC = new IOControllerFTP();
+	private static boolean DEBUG = false;
 	
 
 	@Override
-	public boolean connect(String IP, int port) throws UnknownHostException, IOException, NoInputException {
-		if (IP.isEmpty()){
-			throw new NoInputException();
-		}
-		socket = new Socket(IP, port);
+	public boolean connect(String ip, int port) throws UnknownHostException, IOException, NoInputException {
+//		if (IP.isEmpty()){
+//			throw new NoInputException();
+//		}
+
+		socket = new Socket(ip, port);
 		output = new DataOutputStream(socket.getOutputStream());
 		input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		
+		writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		return true;
 		
 	}
 	@Override
 	public boolean login(String username, String password) throws IOException {
 		try{
-		writeLine("USER " + username);
-		
-		String response =  readLine();
-		if(!response.startsWith("331 ")){
-			throw new IOException("User error");
+		input2 = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	
+		writeLine("TYPE I");
+		while(!input2.ready()){
+			Thread.sleep(20);
 		}
-		writeLine("PASS " + password);
-		response = readLine();
-		if(!response.startsWith("230 ")){
-			throw new IOException("Password error");
-		}
+		String response = readLine();
+		if(response.startsWith("200 "))	{
+			writeLine("USER " + username);
+			while(!input2.ready()){
+				Thread.sleep(20);
+			}
+			response =  readLine();
+			if(!response.startsWith("331 ")){
+				throw new IOException("User error");
+			}
+			writeLine("PASS " + password);
+			while(!input2.ready()){
+				Thread.sleep(20);
+			}
+			response = readLine();
+			if(!response.startsWith("230 ")){
+				throw new IOException("Password error");
+			}}
 		return true;
 		} catch (Exception e){
 			return false;
@@ -132,6 +152,9 @@ public class newFTPClient implements IFTPClient{
 		try{
 			writer.write(line + "\r\n");
 			writer.flush();
+			if(DEBUG){
+				System.out.println("> " + line);
+			}
 		}catch(IOException e){
 			socket = null;
 			throw e;
@@ -140,9 +163,12 @@ public class newFTPClient implements IFTPClient{
 	
 	public String readLine() throws IOException{
 		String line = input.readLine();
+		if (DEBUG) {
+		      System.out.println("< " + line);
+		    }
 		return line;
 	}
-	
+
 	public String getList(InputStream input2) throws IOException{
 		writeLine("PASV");
 		String response = readLine();
@@ -204,18 +230,19 @@ public class newFTPClient implements IFTPClient{
 		String user = null;
 		String pass = null;
 		boolean run = true;
-		ioC.getIP();
-		if(ioC.getPort() == -1){
+		ip = ioC.getIP();
+		port = ioC.getPort();
+		if(port == -1){
 			System.exit(0);
 		}
-		ioC.username();
-		ioC.password();
-		if(connect(ip, port) == false){
+		user = ioC.username();
+		pass = ioC.password();
+		if(connect(ip,port) == false){
 			tui.failedConnected();
 		}
 		if(login(user, pass) == true){
 				switch(ioC.runClient()){
-				case 1:	ioC.getListOfFiles(getList(input2));
+				case 1:	System.out.println("wtf");
 //				case 2: doRandomShit
 //				case 3: doRandomShit2
 				}		
