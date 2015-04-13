@@ -4,18 +4,18 @@ public class LogDTO {
 	
 	private String dato;
 	private String time;
-	OperatoerDTO oprID;
-	RaavareDTO raavareID;
-	private double afvejning;
-	private double paa_lager;
+	private int oprID;
+	private int raavareID;
+	private String afvejning;
+	private String paa_lager;
 	
 	public LogDTO() {
 		this.dato = "";
 		this.time = "";
-		this.oprID = null;
-		this.raavareID = null;
-		this.afvejning = 0.0;
-		this.paa_lager = 0.0;
+		this.oprID = 0;
+		this.raavareID = 0;
+		this.afvejning = "";
+		this.paa_lager = "";
 		
 	}
 
@@ -35,36 +35,37 @@ public class LogDTO {
 		this.time = time;
 	}
 
-	public OperatoerDTO getOprID() {
+	public int getOprID() {
 		return oprID;
 	}
 
-	public void setOprID(OperatoerDTO oprID) {
+	public void setOprID(int oprID) {
 		this.oprID = oprID;
 	}
 
-	public RaavareDTO getRaavareID() {
+	public int getRaavareID() {
 		return raavareID;
 	}
 
-	public void setRaavareID(RaavareDTO raavareID) {
+	public void setRaavareID(int raavareID) {
 		this.raavareID = raavareID;
 	}
 
-	public double getAfvejning() {
+	public String getAfvejning() {
 		return afvejning;
 	}
 
-	public void setAfvejning(double afvejning) {
+	public void setAfvejning(String afvejning) {
 		this.afvejning = afvejning;
 	}
 
-	public double getPaa_lager() {
+	public String getPaa_lager() {
 		return paa_lager;
 	}
 
-	public void setPaa_lager(double paa_lager) {
+	public void setPaa_lager(String paa_lager) {
 		this.paa_lager = paa_lager;
 	}
+	
 
 }

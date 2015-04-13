@@ -85,24 +85,30 @@ public class FileHandler implements IFileHandler {
 		}
 	}
 
-//	@Override
-//	public ArrayList<LogDTO> readLogDB() {
-//		LogDTO nyLBasePost;
-//		ArrayList<OperatoerDTO> nyLBase = new ArrayList<OperatoerDTO>();
-//		try {
-//			br = new BufferedReader(new FileReader(current_operatoer_File));
-//			while((linje = br.readLine()) != null){
-//				String[] tempDB = linje.split(csv_Character);
-//				nyLBasePost = new LogDTO();
-//				nyLBasePost.setDato(Double.parseDouble(tempDB[0]));
-//				nyLBasePost.setOprName(tempDB[1]);
-//				nyLBase.add(nyLBasePost);
-//			}
-//		}catch(Exception e){
-//			System.out.println("Show me I work!");
-//		}
-//		return nyOBase;
-//	}
+	@Override
+	public ArrayList<LogDTO> readLogDB() {
+		LogDTO nyLBasePost;
+		ArrayList<LogDTO> nyLBase = new ArrayList<LogDTO>();
+		try {
+			br = new BufferedReader(new FileReader(current_operatoer_File));
+			while((linje = br.readLine()) != null){
+				String[] tempDB = linje.split(csv_Character);
+				nyLBasePost = new LogDTO();
+				nyLBasePost.setDato(tempDB[0]);
+				nyLBasePost.setTime(tempDB[1]);
+				nyLBasePost.setOprID(Integer.parseInt(tempDB[2]));
+				nyLBasePost.setRaavareID(Integer.parseInt(tempDB[3]));
+				nyLBasePost.setAfvejning(tempDB[4]);
+				nyLBasePost.setPaa_lager(tempDB[5]);
+				nyLBase.add(nyLBasePost);
+			}
+		}
+		catch(Exception e){
+			System.out.println("Show me I work!");
+		}
+		return nyLBase;
+		
+	}
 
 	@Override
 	public void writeLogDB(ArrayList<LogDTO> logDB) {
