@@ -44,14 +44,13 @@ public class OprControl implements OperatoerDAO{
 
 	@Override
 	//	Skal kigges på
-	public void createOperatoer(ArrayList<OperatoerDTO> oprDB, OperatoerDTO opr) {
+	public void createOperatoer(OperatoerDTO opr) {
 		for(int i = 0; i < oDB.size(); i ++){
 			if(opr.getOprID() != oDB.get(i).getOprID()){
-				oprDB.add(i, opr);
+				oDB.add(i, opr);
 				operatoerFil.writeOperatoerDB(oDB);
 			}
 		}
-		
 	}
 
 	@Override
