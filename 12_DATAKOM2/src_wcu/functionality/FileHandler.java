@@ -84,6 +84,19 @@ public class FileHandler implements IFileHandler {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public ArrayList<LogDTO> readLogDB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void writeLogDB(ArrayList<LogDTO> logDB) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
 
 
