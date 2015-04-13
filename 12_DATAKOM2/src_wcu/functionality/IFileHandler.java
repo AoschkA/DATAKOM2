@@ -1,11 +1,13 @@
 package functionality;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import data.Database;
 
 public interface IFileHandler {
-void readOperatoer();
+
+	ArrayList<Database> readOperatoer();
 	
 	ArrayList<Database> readIngredient();
 	
@@ -13,7 +15,7 @@ void readOperatoer();
 	
 	void writeIngredient();
 	
-	void checkIfOperatoerExixts();
+	boolean checkIfOperatoerExixts() throws IOException;
 	
 	void checkIfIngredientExixts();
 	
