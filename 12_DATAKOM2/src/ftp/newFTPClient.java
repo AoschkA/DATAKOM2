@@ -1,8 +1,11 @@
 package ftp;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -96,19 +99,17 @@ public class newFTPClient implements IFTPClient{
 			 throw new IOException("coundn't send file");
 		 }
 		 DataInputStream input = new DataInputStream(socket.getInputStream());
-		 System.out.println("ad");
 		 
 		 try{
 			 byte[] buffer = new byte[1024];
 		        int bytesRead;
 		        while((bytesRead=input.read(buffer))>0){
 		            output.write(buffer,0,bytesRead);
-		            System.out.println("a");
 		        }
 		        input.close();
+		        tui.printMessage("Download done");
 		 }catch(IOException e){
 			 input.close();
-			 System.out.println("fuck this shit");
 			 }}
 		 }
 		 finally
@@ -234,15 +235,28 @@ public class newFTPClient implements IFTPClient{
 			tui.failedConnected();
 		}
 		if(login(user, pass) == true){
+			while(run){
 				switch(ioC.runClient()){
-					case 1:	System.out.println(getList());
-				//	case 2: logout();
-				//	case 3: doRandomShit2
+					case 1:	typeFile();
+					break;
+					case 2: logout();
+					run = false;
+					break;
+					case 3: tui.printMessage(getList());
+					break;
 					}		
-		}
+		}}
 		else{
 			tui.failedConnected();
 		}
+		
+	}
+	private void typeFile() throws IOException {
+		String fileToDownload = "/" + ioC.getStringInput();
+        File downloadFile1 = new File("C:/Users/" + fileToDownload);
+        OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));
+        retrieveFile(fileToDownload, outputStream1);
+		outputStream1.close();
 		
 	}
 	public void newFTPClient() throws IOException, NoInputException, InterruptedException {
