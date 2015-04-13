@@ -7,7 +7,7 @@ public class LogDTO {
 	OperatoerDTO oprID;
 	RaavareDTO raavareID;
 	private double afvejning;
-	private double på_lager;
+	private double paa_lager;
 	
 	public LogDTO() {
 		this.dato = "";
@@ -15,7 +15,7 @@ public class LogDTO {
 		this.oprID = null;
 		this.raavareID = null;
 		this.afvejning = 0.0;
-		this.på_lager = 0.0;
+		this.paa_lager = 0.0;
 		
 	}
 
@@ -59,12 +59,12 @@ public class LogDTO {
 		this.afvejning = afvejning;
 	}
 
-	public double getPå_lager() {
-		return på_lager;
+	public double getPaa_lager() {
+		return paa_lager;
 	}
 
-	public void setPå_lager(double på_lager) {
-		this.på_lager = på_lager;
+	public void setPaa_lager(double paa_lager) {
+		this.paa_lager = paa_lager;
 	}
 
 }
