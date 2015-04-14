@@ -6,11 +6,14 @@ import data.TempVare;
 public class UserHandler {
 	public static WeightCommunicator wc = new WeightCommunicator("127.0.0.1",
 			4567);
+	public static LogControl lc = new LogControl();
 	public static TempVare tv = new TempVare();
 	public static OprControl oc = new OprControl();
 	public static RaavareControl rc = new RaavareControl();
 	public static boolean run = true;
 	public static String vaegtSvar = "";
+	public static int currentOperatoer = 0;
+	public static int currentRaavare = 0;
 	int x;
 
 	public UserHandler() {
@@ -120,7 +123,7 @@ public class UserHandler {
 				switch (svar) {
 				case "ja":
 					vaegtSvar = wc.writeSocket("S\r\n");
-					vaegtSvar = vaegtSvar.substring(10, vaegtSvar.length());
+					vaegtSvar = vaegtSvar.substring(8, vaegtSvar.length()-3);
 					tv.setNetto(vaegtSvar);
 					return STATE6;
 				case "Q":
@@ -154,7 +157,10 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
-					
+					vaegtSvar = wc.writeSocket("T\r\n");
+					vaegtSvar = vaegtSvar.substring(8,vaegtSvar.length()-3);
+					tv.setTare(vaegtSvar);
+					vaegtSvar = "ja";
 					return STATE8;
 				case "Q":
 					return STOP;
@@ -170,6 +176,7 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
+					//Bruttokontrol
 					return STATE9;
 				case "Q":
 					return STOP;
@@ -185,6 +192,7 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
+					lc.registerLogEntry(oc.getOperatoer(currentOperatoer), rc.getRaavare(currentRaavare), tv.netto.toString());
 					return START;
 				case "Q":
 					return STOP;
@@ -223,9 +231,11 @@ public class UserHandler {
 		try {
 			u.runScheme("ja");
 			if(oc.getOperatoer(Integer.parseInt(vaegtSvar)).getOprID() != 999999){
+				currentOperatoer =  oc.getOperatoer(Integer.parseInt(vaegtSvar)).getOprID();
 				u.runScheme("ja");
 			}
 			if(rc.getRaavare(Integer.parseInt(vaegtSvar)).getRaavareID() != 999999) {
+				currentRaavare = rc.getRaavare(Integer.parseInt(vaegtSvar)).getRaavareID();
 				u.runScheme("ja");
 			}
 			if(vaegtSvar.equals("ja")){
@@ -235,6 +245,12 @@ public class UserHandler {
 				u.runScheme("ja");
 			}
 			u.runScheme("ja");
+			if(vaegtSvar.equals("ja")){
+				u.runScheme("ja");
+			}
+			if(vaegtSvar.equals("ja")){
+				u.runScheme("ja");
+			}
 			if(vaegtSvar.equals("ja")){
 				u.runScheme("ja");
 			}
