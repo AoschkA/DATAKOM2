@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 import ftp.Exceptions.NoInputException;
 
 public class testAfFtpClient {
-	static newFTPClient ftpC = new newFTPClient();
+	static FTPClient ftpC = new FTPClient();
 	
 	public static void main(String args[]) throws UnknownHostException, IOException, NoInputException, InterruptedException{
 		String ip = "130.226.21.129";

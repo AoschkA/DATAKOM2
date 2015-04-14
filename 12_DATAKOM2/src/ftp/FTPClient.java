@@ -18,13 +18,13 @@ import java.util.StringTokenizer;
 import boundary_ftp.TUI;
 import ftp.Exceptions.NoInputException;
 
-public class newFTPClient implements IFTPClient{
+public class FTPClient implements IFTPClient{
 	Socket socket;
 	DataOutputStream output;
 	InputStream input;
 	BufferedReader reader;
 	TUI tui = new TUI();
-	IOControllerFTP ioC = new IOControllerFTP();
+	IOController ioC = new IOController();
 	String list;
 	boolean checkSucces;
 
@@ -280,7 +280,7 @@ public class newFTPClient implements IFTPClient{
 		
 	}
 	
-	public void newFTPClient() throws IOException, NoInputException, InterruptedException {
+	public void run() throws IOException, NoInputException, InterruptedException {
 		connectAndLogin();
 	}
 		

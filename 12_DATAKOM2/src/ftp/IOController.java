@@ -5,7 +5,7 @@ import java.io.IOException;
 import ftp.Exceptions.InvalidInputException;
 import boundary_ftp.TUI;
 
-public class IOControllerFTP {
+public class IOController {
 	 TUI TUI = new TUI();
 	
 	public String getStringInput() {
@@ -18,7 +18,7 @@ public class IOControllerFTP {
 		return n;
 	}
 	
-	public int getIntInput() throws IOException {
+	public int getIntInput(){
 		int n = 0;
 		try {
 		n = TUI.getIntResponse();
@@ -29,25 +29,24 @@ public class IOControllerFTP {
 	}
 		
 	public int runClient(){
-		boolean run=true;
 		int input = 0;
 		TUI.startMessage();
-		while(run){
 		TUI.printTUIClient();
+		try {
 		switch(getMainMenu()) {
 		case 1: input = 1;
-				run =false;
 				break;
 		case 2: input = 2;
-				run = false;
 				break;
 		case 3: input = 3;
-				run=false;
 				break;
 		case 4: input = 4;
-				run = false;
 				break;
-		}}
+		default: throw new InvalidInputException();
+		}} catch (InvalidInputException e) {
+			TUI.printMessage("Invalid input");
+			return getMainMenu();
+		}
 		
 		return input;
 	}
@@ -65,9 +64,9 @@ public class IOControllerFTP {
 		break;
 		case "4": output = 4;
 		break;
-		default: throw new IOException();
-		} } catch (IOException e) {
-			TUI.printMessage("Couldn't recognize the input");
+		default: throw new InvalidInputException();
+		} } catch (InvalidInputException e) {
+			TUI.printMessage("Invalid input");
 			return getMainMenu();
 		} 
 		return output;
