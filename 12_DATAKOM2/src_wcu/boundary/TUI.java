@@ -25,7 +25,8 @@ public class TUI implements IUI {
 		try{
 		port = Integer.parseInt(inFromUser.readLine());
 		}catch (NumberFormatException e){
-			System.out.println("not a valid port number please try and reconnect");
+			System.out.println("Invalid Input");
+			return getIntResponse();
 		}
 		return port;
 	}

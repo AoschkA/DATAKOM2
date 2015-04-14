@@ -20,41 +20,41 @@ public class TUI implements IUI {
 	
 	@Override
 	public int getIntResponse() throws IOException{
-		int port = -1;
+		int n = -1;
 		try{
-		port = Integer.parseInt(inFromUser.readLine());
+		n = Integer.parseInt(inFromUser.readLine());
 		}catch (NumberFormatException e){
-			System.out.println("not a valid port number please try and reconnect");
+			System.out.println("Invalid Input");
+			return getIntResponse();
 		}
-		return port;
+		return n;
 	}
 	
 	public void startMessage(){
 		System.out.println("#########################");
 		System.out.println("welcome to our ftp-client");
-		System.out.println("#########################");
 	}
 	
 	public void printTUIClient() {
 		System.out.println("######################");
 		System.out.println("Current options");
-		System.out.println("1: recive file from FTP server");
-		System.out.println("2: logout");
-		System.out.println("3: get list of files");
-		System.out.println("4: upload file");
+		System.out.println("1: Recive file from FTP server");
+		System.out.println("2: Logout");
+		System.out.println("3: Get list of files");
+		System.out.println("4: Upload file");
 	}
 	
 	public void connect_ip(){
-		System.out.println("please enter ip");
+		System.out.println("Please enter ip");
 	}
 	public void connect_port(){
-		System.out.println("please enter port to connect");
+		System.out.println("Please enter port to connect");
 	}
 	public void username(){
-		System.out.println("please enter Username");
+		System.out.println("Please enter Username");
 	}
 	public void password(){
-		System.out.println("please enter password");
+		System.out.println("Please enter password");
 	}
 	public void failedConnected(){
 		System.out.println("Failed to connect: wrong ip or port number");
