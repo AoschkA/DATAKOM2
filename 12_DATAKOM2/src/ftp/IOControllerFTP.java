@@ -39,21 +39,21 @@ public class IOControllerFTP {
 	
 	public int runClient(){
 		boolean run=true;
-		int cunt = 0;
+		int input = 0;
 		TUI.startMessage();
 		while(run){
 		TUI.printTUIClient();
 		switch(getMainMenu()) {
-		case 1: cunt = 1;
+		case 1: input = 1;
 				run =false;
 				break;
-		case 2: cunt = 2;
+		case 2: input = 2;
 				run = false;
 				break;
-		case 3: cunt = 3;
+		case 3: input = 3;
 				run=false;
 				break;
-		case 4: cunt = 4;
+		case 4: input = 4;
 				run = false;
 				break;
 		case 5: System.out.println("no idea what to do");
@@ -62,7 +62,7 @@ public class IOControllerFTP {
 				break;
 		}}
 		
-		return cunt;
+		return input;
 	}
 	
 	public int getMainMenu() {
