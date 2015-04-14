@@ -80,12 +80,13 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
-					System.out.println("før T");
-					vaegtSvar = wc.writeSocket("T");
-					System.out.println(vaegtSvar);
-					vaegtSvar = vaegtSvar.substring(7,vaegtSvar.length());
-					System.out.println(vaegtSvar);
+					vaegtSvar = wc.writeSocket("T\r\n");
+					vaegtSvar = vaegtSvar.substring(8,vaegtSvar.length()-3);
+					tv.setTare(vaegtSvar);
+					vaegtSvar = "ja";
 					return STATE4;
+				case "nej":
+					return STATE3;
 				case "Q":
 					return STOP;
 				default:
@@ -100,7 +101,9 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
-					System.out.println("State 4!");
+					vaegtSvar = wc.writeSocket("RM20 8 \"Paafyld Vare, svar ja ved klar!\" \" \" \" \" ");
+					vaegtSvar = wc.readSocket();
+					vaegtSvar = vaegtSvar.substring(7, vaegtSvar.length());
 					return STATE5;
 				case "Q":
 					return STOP;
@@ -116,6 +119,9 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
+					vaegtSvar = wc.writeSocket("S\r\n");
+					vaegtSvar = vaegtSvar.substring(10, vaegtSvar.length());
+					tv.setNetto(vaegtSvar);
 					return STATE6;
 				case "Q":
 					return STOP;
@@ -131,6 +137,8 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
+					vaegtSvar = wc.writeSocket("RM20 8 \"Fjern Tara og Vaegt, svar med ja naar klar!\" \" \" \" \" \r\n");
+					vaegtSvar = vaegtSvar.substring(7, vaegtSvar.length());
 					return STATE7;
 				case "Q":
 					return STOP;
@@ -146,6 +154,7 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
+					
 					return STATE8;
 				case "Q":
 					return STOP;
@@ -213,18 +222,23 @@ public class UserHandler {
 		UserHandler u = new UserHandler();
 		try {
 			u.runScheme("ja");
-			System.out.println(vaegtSvar);
 			if(oc.getOperatoer(Integer.parseInt(vaegtSvar)).getOprID() != 999999){
 				u.runScheme("ja");
 			}
-			System.out.println(vaegtSvar);
 			if(rc.getRaavare(Integer.parseInt(vaegtSvar)).getRaavareID() != 999999) {
 				u.runScheme("ja");
 			}
-			System.out.println(vaegtSvar);
 			if(vaegtSvar.equals("ja")){
 				u.runScheme("ja");
 			}
+			if(vaegtSvar.equals("ja")){
+				u.runScheme("ja");
+			}
+			u.runScheme("ja");
+			if(vaegtSvar.equals("ja")){
+				u.runScheme("ja");
+			}
+			
 		} catch (Exception e) {
 			System.out.println("intet data på port");
 		}
