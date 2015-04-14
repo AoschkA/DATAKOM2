@@ -111,7 +111,9 @@ public class newFTPClient implements IFTPClient{
 		        }
 		        output.flush();
 		        socket.close();
-		        return true;
+		        response = readLine();
+		        tui.printMessage(response);
+		        return response.startsWith("226 ");
 		}
 		return false;
 		
