@@ -18,7 +18,7 @@ public class test2 {
 		ftpC.login("modbus","336699");
 		String fileToUpload = "/penis.txt";
         File uploadFile1 = new File("C:/Users/Mads/" + fileToUpload);
-        ftpC.send(uploadFile1);
+        ftpC.sendFile(uploadFile1);
 		String remoteFile1 = "/penis.txt";
         File downloadFile1 = new File("C:/Users/Mads/penis2.txt");
         OutputStream outputStream1 = new BufferedOutputStream(new FileOutputStream(downloadFile1));

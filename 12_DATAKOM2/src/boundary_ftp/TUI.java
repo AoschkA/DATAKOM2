@@ -42,8 +42,6 @@ public class TUI implements IUI {
 		System.out.println("2: logout");
 		System.out.println("3: get list of files");
 		System.out.println("4: upload file");
-		System.out.println("5: send command to zybo-board");
-		System.out.println("6: send command to zybo-board");
 	}
 	
 	public void connect_ip(){
@@ -61,7 +59,6 @@ public class TUI implements IUI {
 	public void failedConnected(){
 		System.out.println("Failed to connect: wrong ip or port number");
 	}
-
 	public void failedToLogin() {
 		System.out.println("Failed to Login: wrong username or password");
 		

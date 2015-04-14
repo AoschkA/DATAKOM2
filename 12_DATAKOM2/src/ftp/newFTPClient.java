@@ -15,9 +15,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
-
 import boundary_ftp.TUI;
-import ftp.Exceptions.InvalidInputException;
 import ftp.Exceptions.NoInputException;
 
 public class newFTPClient implements IFTPClient{
@@ -27,8 +25,8 @@ public class newFTPClient implements IFTPClient{
 	BufferedReader reader;
 	TUI tui = new TUI();
 	IOControllerFTP ioC = new IOControllerFTP();
-
-	
+	String list;
+	boolean checkSucces;
 
 	@Override
 	public boolean connect(String ip, int port) throws UnknownHostException, IOException, NoInputException {
@@ -42,6 +40,7 @@ public class newFTPClient implements IFTPClient{
 		return true;
 		
 	}
+	
 	@Override
 	public boolean login(String username, String password) throws IOException {
 		try{
@@ -51,73 +50,76 @@ public class newFTPClient implements IFTPClient{
 			response = readLine();
 			System.out.println(response);
 			if(!response.startsWith("331 ")){
-				throw new IOException("User error");
+				throw new IOException("Invalid User");
 			}
 			writeLine("PASS " + password);
 			response = readLine();
 			System.out.println(response);
 			if(!response.startsWith("230 ")){
-				throw new IOException("Password error");
+				throw new IOException("Invalid Password");
 			}
 		return true;
 		} catch (Exception e){
 			return false;
 		}
 	}
+	
 	@Override
 	public boolean retrieveFile(String filename, OutputStream output) throws IOException {
-		
+		//sætter den i binary transfere mode
 		writeLine("TYPE I");
 		String response = readLine();
 		if(response.startsWith("200 "))	{
-		writeLine("PASV");
-		response = readLine();
-		if(!response.startsWith("227 ")){
-			throw new IOException("couldn't enter passive mode" + response);
+			//Hvis det lykkedes at komme i binary mode så prøver den på at enter passive mode.
+			writeLine("PASV");
+			response = readLine();
+			if(!response.startsWith("227 ")){
+				throw new IOException("couldn't enter passive mode" + response);
+			}
+				//vi tager nu response fra server og udregner vores IP og port til overførelsen.
+			  	String ip = null;
+			    int port = -1;
+			    int opening = response.indexOf('(');
+			    int closing = response.indexOf(')', opening + 1);
+			    if (closing > 0) {
+			      String dataLink = response.substring(opening + 1, closing);
+			      StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+			      try {
+			        ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
+			            + tokenizer.nextToken() + "." + tokenizer.nextToken();
+			        port = Integer.parseInt(tokenizer.nextToken()) * 256
+			            + Integer.parseInt(tokenizer.nextToken());
+			      } catch (Exception e) {
+			        throw new IOException("couldn't connect probaly to:"
+			            + response);
+			      }
+			    }
+			    
+			 //instancier socket med vores nye ip og port og beder ftp-serveren om at sende den ønskede fil   
+			 Socket socket = new Socket(ip, port);
+			 writeLine("RETR " + filename);
+			 response= readLine();
+			 System.out.println(response);
+			 if(!response.startsWith("150 ")){
+				 throw new IOException("coundn't retrieve file" + response);
+			 }
+			 DataInputStream input = new DataInputStream(socket.getInputStream());
+			 //kopier den indkommene information 
+				 byte[] buffer = new byte[1024];
+			        int bytesRead;
+			        while((bytesRead=input.read(buffer))>0){
+			        	output.write(buffer,0,bytesRead);
+			        }
+			        output.flush();
+			        socket.close();
+			        response = readLine();
+			        tui.printMessage(response);
+			        return response.startsWith("226 ");
+			}
+			return false;
+			
 		}
-		
-		  String ip = null;
-		    int port = -1;
-		    int opening = response.indexOf('(');
-		    int closing = response.indexOf(')', opening + 1);
-		    if (closing > 0) {
-		      String dataLink = response.substring(opening + 1, closing);
-		      StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
-		      try {
-		        ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
-		            + tokenizer.nextToken() + "." + tokenizer.nextToken();
-		        port = Integer.parseInt(tokenizer.nextToken()) * 256
-		            + Integer.parseInt(tokenizer.nextToken());
-		      } catch (Exception e) {
-		        throw new IOException("couldn't connect probaly to:"
-		            + response);
-		      }
-		    }
-		 Socket socket = new Socket(ip, port);
-		 writeLine("RETR " + filename);
-		 
-		 response= readLine();
-		 System.out.println(response);
-		 if(!response.startsWith("150 ")){
-			 throw new IOException("coundn't retrieve file" + response);
-		 }
-		 DataInputStream input = new DataInputStream(socket.getInputStream());
-		 
 	
-			 byte[] buffer = new byte[1024];
-		        int bytesRead;
-		        while((bytesRead=input.read(buffer))>0){
-		        	output.write(buffer,0,bytesRead);
-		        }
-		        output.flush();
-		        socket.close();
-		        response = readLine();
-		        tui.printMessage(response);
-		        return response.startsWith("226 ");
-		}
-		return false;
-		
-	}
 	@Override
 	public boolean logout() {
 		try{
@@ -133,7 +135,6 @@ public class newFTPClient implements IFTPClient{
 		}
 		return false;
 	}
-
 	
 	public void writeLine(String line) throws IOException{
 		try{
@@ -149,7 +150,7 @@ public class newFTPClient implements IFTPClient{
 		return line;
 	}
 
-	public String getList() throws IOException, InterruptedException{
+	public boolean getList() throws IOException, InterruptedException{
 		try{
 			writeLine("TYPE I");
 			String response = readLine();
@@ -180,6 +181,8 @@ public class newFTPClient implements IFTPClient{
 					if(!response.startsWith("150 ")){
 						throw new IOException("couldn't receive list");
 					}
+					//Skriver en string ud som bliver printet i consollen så man har en oversigt over alle filer på ftp server
+					//skriver også Directorys ud.
 					BufferedReader br = null;
 					StringBuilder sb = new StringBuilder();
 					String line;
@@ -199,13 +202,14 @@ public class newFTPClient implements IFTPClient{
 							}
 						}
 					}
+				
 					socket.close();
-					return sb.toString();
+					list = sb.toString();
+					return true;
 					}}catch(IOException e){
 						e.printStackTrace();
 					}
-		
-			return "no list retrieve ";
+		return false;
 		}
 	
 	public void connectAndLogin() throws IOException, NoInputException, InterruptedException{
@@ -225,14 +229,15 @@ public class newFTPClient implements IFTPClient{
 			while(run){
 				switch(ioC.runClient()){
 					case 1:	retrieveChoosenFile();
-					break;
+							break;
 					case 2: logout();
-					run = false;
-					break;
-					case 3: ioC.getListOfFiles(getList());
-					break;
+							run = false;
+							break;
+					case 3: getList();
+							ioC.getListOfFiles(list);
+							break;
 					case 4: sendChoosenFile();
-					break;
+							break;
 					}		
 		}}
 		else{
@@ -241,8 +246,8 @@ public class newFTPClient implements IFTPClient{
 		
 	}
 	
-	private void retrieveChoosenFile() throws IOException {
-		boolean checkSucces;
+	
+	public void retrieveChoosenFile() throws IOException {
 		tui.printMessage("Please enter the name of the file you wish to download");
 		tui.printMessage("Or type 'back' to go back to the main menu");
 		String fileToDownload = ioC.getStringInput();
@@ -277,23 +282,25 @@ public class newFTPClient implements IFTPClient{
 		} 
 		
 	}
+	
 	public void newFTPClient() throws IOException, NoInputException, InterruptedException {
 		connectAndLogin();
 	}
 		
 	public void sendChoosenFile() throws IOException{
-		boolean checkSucces;
+		String name;
 		tui.printMessage("Please enter the name of the file you wish to upload");
 		tui.printMessage("Or type 'back' to go back to the main menu");
-		String fileToUpload = "/" + ioC.getStringInput();
+		String fileToUpload = ioC.getStringInput();
 		if (!fileToUpload.equals("/back")){
 			tui.printMessage("Press '1': Enter the location of the folder");
 			tui.printMessage("Press '2': If the file is in user folder, enter name of the folder");
 			int n = ioC.getDestination();
 		if (n==1) {
 			tui.printMessage("Enter the path of the file");
-			File uploadFile1 = new File(ioC.getStringInput() + fileToUpload);
-			checkSucces = send(uploadFile1);
+			File uploadFile = new File(ioC.getStringInput() +"/"+ fileToUpload);
+			name = uploadFile.getName();
+			checkSucces = sendFile(new FileInputStream(uploadFile), name);
 			if(checkSucces == true){
 				tui.printMessage("The upload was succesfull");
 			}else {
@@ -302,8 +309,9 @@ public class newFTPClient implements IFTPClient{
 		}
 		if (n==2){
 			tui.printMessage("Enter the name of your user folder");
-			File uploadFile1 = new File("C:/Users/" + ioC.getStringInput() + fileToUpload);
-			checkSucces = send(uploadFile1);
+			File uploadFile = new File("C:/Users/" + ioC.getStringInput() +"/"+ fileToUpload);
+			name = uploadFile.getName();
+			checkSucces = sendFile(new FileInputStream(uploadFile), name);
 			if(checkSucces == true){
 				tui.printMessage("The upload was succesfull");
 			}else {
@@ -312,17 +320,11 @@ public class newFTPClient implements IFTPClient{
 		}
 		} 
 	}
-	public boolean send(File file) throws IOException {
-	    String filename = file.getName();
-	    tui.printMessage(filename);
-	    return sendFile(new FileInputStream(file), filename);
-	  }
+	
 	
 	@Override
 	public boolean sendFile(InputStream inputStream, String filename) throws IOException {
-		  
 			    BufferedInputStream input = new BufferedInputStream(inputStream);
-
 			    writeLine("PASV");
 			    String response = readLine();
 			    if (!response.startsWith("227 ")) {
@@ -348,9 +350,7 @@ public class newFTPClient implements IFTPClient{
 			    Socket socket = new Socket(ip, port);
 			    
 			    tui.printMessage(filename);
-			    writeLine("STOR " + filename);
-
-			    
+			    writeLine("STOR " + filename);		    
 			    response = readLine();
 			    if (!response.startsWith ("150 ")) {
 			      throw new IOException("couldn't send the file: "+ response);

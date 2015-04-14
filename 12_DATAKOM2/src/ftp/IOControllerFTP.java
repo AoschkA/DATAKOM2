@@ -7,8 +7,6 @@ import boundary_ftp.TUI;
 
 public class IOControllerFTP {
 	 TUI TUI = new TUI();
-
-
 	
 	public String getStringInput() {
 		String input = "";
@@ -34,9 +32,7 @@ public class IOControllerFTP {
 		
 		return output;	
 	}
-	
-	
-	
+		
 	public int runClient(){
 		boolean run=true;
 		int input = 0;
@@ -56,10 +52,6 @@ public class IOControllerFTP {
 		case 4: input = 4;
 				run = false;
 				break;
-		case 5: System.out.println("no idea what to do");
-				break;
-		case 6: System.out.println("no idea what to do");
-				break;
 		}}
 		
 		return input;
@@ -77,10 +69,6 @@ public class IOControllerFTP {
 		case "3": output = 3;
 		break;
 		case "4": output = 4;
-		break;
-		case "5": output = 5;
-		break;
-		case "6": output = 6;
 		break;
 		default: throw new IOException();
 		} } catch (IOException e) {
