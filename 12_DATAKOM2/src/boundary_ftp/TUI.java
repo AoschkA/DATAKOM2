@@ -31,7 +31,7 @@ public class TUI implements IUI {
 	
 	public void startMessage(){
 		System.out.println("#########################");
-		System.out.println("welcome to out ftp-client");
+		System.out.println("welcome to our ftp-client");
 		System.out.println("#########################");
 	}
 	

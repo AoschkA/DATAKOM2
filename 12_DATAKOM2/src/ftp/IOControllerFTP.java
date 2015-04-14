@@ -9,28 +9,23 @@ public class IOControllerFTP {
 	 TUI TUI = new TUI();
 	
 	public String getStringInput() {
-		String input = "";
-		try{
-			input = TUI.getResponse();
+		String n = "";
+		try {
+		n = TUI.getResponse();
 		} catch (IOException e) {
-			TUI.printMessage("No input detected");
-			return getStringInput();
+			e.printStackTrace();
 		}
-		return input;
+		return n;
 	}
 	
-	public int getIntInput() {
-		int output=0;
-		String input = getStringInput();
-		try{
-			output = Integer.parseInt(input);
+	public int getIntInput() throws IOException {
+		int n = 0;
+		try {
+		n = TUI.getIntResponse();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		catch(NumberFormatException e){
-			TUI.printMessage("Couldn't recognize the input");
-			return getIntInput();
-		}
-		
-		return output;	
+		return n;
 	}
 		
 	public int runClient(){
