@@ -1,10 +1,12 @@
 package functionality;
 
 import control.WeightCommunicator;
+import data.TempVare;
 
 public class UserHandler {
 	public static WeightCommunicator wc = new WeightCommunicator("127.0.0.1",
 			4567);
+	public static TempVare tv = new TempVare();
 	public static OprControl oc = new OprControl();
 	public static RaavareControl rc = new RaavareControl();
 	public static boolean run = true;
@@ -78,7 +80,11 @@ public class UserHandler {
 				
 				switch (svar) {
 				case "ja":
-					System.out.println("KLAPHAT");
+					System.out.println("før T");
+					vaegtSvar = wc.writeSocket("T");
+					System.out.println(vaegtSvar);
+					vaegtSvar = vaegtSvar.substring(7,vaegtSvar.length());
+					System.out.println(vaegtSvar);
 					return STATE4;
 				case "Q":
 					return STOP;
