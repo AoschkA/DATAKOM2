@@ -66,13 +66,10 @@ public class newFTPClient implements IFTPClient{
 	
 	@Override
 	public boolean retrieveFile(String filename, OutputStream output) throws IOException {
-		//sætter den i binary transfere mode
-		writeLine("TYPE I");
-		String response = readLine();
-		if(response.startsWith("200 "))	{
+			try {
 			//Hvis det lykkedes at komme i binary mode så prøver den på at enter passive mode.
 			writeLine("PASV");
-			response = readLine();
+			String response = readLine();
 			if(!response.startsWith("227 ")){
 				throw new IOException("couldn't enter passive mode" + response);
 			}
@@ -115,6 +112,8 @@ public class newFTPClient implements IFTPClient{
 			        response = readLine();
 			        tui.printMessage(response);
 			        return response.startsWith("226 ");
+			}catch (IOException e){
+				e.printStackTrace();
 			}
 			return false;
 			
@@ -152,11 +151,8 @@ public class newFTPClient implements IFTPClient{
 
 	public boolean getList() throws IOException, InterruptedException{
 		try{
-			writeLine("TYPE I");
-			String response = readLine();
-			if(response.startsWith("200 "))	{
 				writeLine("PASV");
-				response = readLine();
+				String response = readLine();
 				if(!response.startsWith("227 ")){
 					throw new IOException("couldn't enter passive mode: " + response);
 				}
@@ -205,8 +201,8 @@ public class newFTPClient implements IFTPClient{
 				
 					socket.close();
 					list = sb.toString();
-					return true;
-					}}catch(IOException e){
+					return response.startsWith("226 ");
+					}catch(IOException e){
 						e.printStackTrace();
 					}
 		return false;
@@ -226,20 +222,21 @@ public class newFTPClient implements IFTPClient{
 			tui.failedConnected();
 		}
 		if(login(user, pass) == true){
-			while(run){
-				switch(ioC.runClient()){
-					case 1:	retrieveChoosenFile();
-							break;
-					case 2: logout();
-							run = false;
-							break;
-					case 3: getList();
-							ioC.getListOfFiles(list);
-							break;
-					case 4: sendChoosenFile();
-							break;
-					}		
-		}}
+			if(setType() == true){
+				while(run){
+					switch(ioC.runClient()){
+						case 1:	retrieveChoosenFile();
+								break;
+						case 2: logout();
+								run = false;
+								break;
+						case 3: getList();
+								ioC.getListOfFiles(list);
+								break;
+						case 4: sendChoosenFile();
+								break;
+						}		
+				}}}
 		else{
 			tui.failedToLogin();
 		}
@@ -325,6 +322,7 @@ public class newFTPClient implements IFTPClient{
 	@Override
 	public boolean sendFile(InputStream inputStream, String filename) throws IOException {
 			    BufferedInputStream input = new BufferedInputStream(inputStream);
+			    
 			    writeLine("PASV");
 			    String response = readLine();
 			    if (!response.startsWith("227 ")) {
@@ -371,5 +369,15 @@ public class newFTPClient implements IFTPClient{
 			    return response.startsWith("226 ");
 			  }
 	
+	public boolean setType() throws IOException{
+		writeLine("TYPE I");
+		String response = readLine();
+		if(response.startsWith("200 ")){
+			tui.printMessage("entered binary mode");
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
 
