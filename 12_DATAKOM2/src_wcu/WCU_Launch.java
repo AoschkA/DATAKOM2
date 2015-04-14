@@ -12,10 +12,6 @@ public class WCU_Launch {
 		wc.connectToServer();
 		int i = 0;
 		UserHandler uh = new UserHandler();
-		uh.doSomething(11);
-		uh.doSomething(12);
-		uh.doSomething(13);
-		uh.doSomething(14);
 		while(run){
 			wc.writeSocket("D hej klaphat \r\n");
 			System.out.println(wc.readSocket());

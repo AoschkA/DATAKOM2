@@ -3,135 +3,101 @@ package functionality;
 import control.WeightCommunicator;
 
 public class UserHandler{
-	public static WeightCommunicator wc = new WeightCommunicator("10.16.169.246",4567);
+	public static WeightCommunicator wc = new WeightCommunicator("127.0.0.1",4567);
+	public static boolean run = true;
+	int x;
 	
 	public UserHandler(){
-	this.state = State.START;
+		wc.connectToServer();
+		this.state = State.START;
 	}
 	// Sekvensmaskine initialiseres.
 		public enum State {
 			START {
 				@Override
-				State changeState(String svar) {
-					switch(svar) {
-					case :
-						
+				State changeState(int x) {
+					System.out.println(x);
+					switch(x) {
+					case 10:
+						System.out.println("enteringstart");
 						return STATE1;
-					case -1:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return START;
-					case -2:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return STOP;
 					default:
 						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
+						//System.out.println("I am now changing from state " + this + " with int argument x = " + x);
 						return INVALIDSTATE;
-				}
+					}
 				}
 			},
 			STATE1 {
 
 				@Override
-				State changeState(String svar) {
+				State changeState(int x) {
 					switch(x) {
 					case 12:
 						// TODO: do something
 						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return STATE2;
-					case -1:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
 						return START;
-					case -2:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return STOP;
+//					case -1:
+//						// TODO: do something
+//						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
+//						return START;
+//					case -2:
+//						// TODO: do something
+//						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
+//						return STOP;
 					default:
 						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return INVALIDSTATE;
-				}
-				}},
-			STATE2 {
-
-				@Override
-				State changeState(String svar) {
-					switch(x) {
-					case 13:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return STATE3;
-					case -1:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return START;
-					case -2:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return STOP;
-					default:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return INVALIDSTATE;
-				}
-				}},
-			STATE3 {
-
-				@Override
-				State changeState(String svar) {
-					switch(x) {
-					case 14:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return STOP;
-					case -1:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return START;
-					case -2:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
-						return STOP;
-					default:
-						// TODO: do something
-						System.out.println("I am now changing from state " + this + " with int argument x = " + x);
+						//System.out.println("I am now changing from state " + this + " with int argument x = " + x);
 						return INVALIDSTATE;
 				}
 				}},
 			INVALIDSTATE {
 
 				@Override
-				State changeState(String svar) {
+				State changeState(int x) {
 					System.out.println("invalidstate");
 					return STOP;
 				}},
 			STOP {
 
 				@Override
-				State changeState(String svar) {
+				State changeState(int x) {
 					return STOP;
 				}};
-			abstract State changeState(String svar);
+			abstract State changeState(int x);
 		}
 
 		private State state;
 		
-		public void doSomething(int x) {
+		public void runScheme(int x) {
 			this.state = this.state.changeState(x);
 		}
 		
-		public void blah(){
-			WeightCommunicator wc = new WeightCommunicator("10.16.169.246",4567);
-		}
 		public static void main(String[] args) {
 			// Start af kontrolsekvens
 			System.out.println("Sekvensmaskinen startet.");
 			UserHandler u = new UserHandler();
-			u.doSomething(11);
-			
+			//while(run){
+				try{
+					//wc.writeSocket("RM20 8 \"Indtast OperatørID\" \"\" \"\" crlf");
+					String test = "";
+					System.out.println("Operatør ID anmodet");
+					test = wc.writeSocket("RM20 8 \"hejsa\" \"342\" \"kkk\" \r\n");
+					System.out.println(test);
+					if (test.equals("RM20 B")){
+						System.out.println("hej inde i if");
+						u.runScheme(10);
+					}
+					test = wc.readSocket();
+					if (test.startsWith("RM20 A")){
+						System.out.println("hej inde i anden if");
+						u.runScheme(12);
+					}
+					
+				}catch(Exception e){
+					System.out.println("intet data på port");
+				}
+			//}
 		}
 		
 	}

@@ -22,7 +22,6 @@ public class WeightCommunicator {
 	}
 
 	public void connectToServer() {
-		IP = "10.16.169.246";
 		try {
 			sock = new Socket(IP, portdst);
 			outstream = 
@@ -38,18 +37,21 @@ public class WeightCommunicator {
 			e.printStackTrace();
 		} 
 	}
-	public void writeSocket(String message){
+	public String writeSocket(String message){
 		try {
 			outstream.writeBytes(message);
+			return instream.readLine();
 		} catch (IOException e) {
 			System.out.println("Write failed");
 			e.printStackTrace();
 		}
+		return message;
+		
 	}
 	public String readSocket(){
 		String readMessage = "";
 		try {
-			readMessage = instream.readLine();
+				readMessage = instream.readLine();
 		} catch (IOException e) {
 			System.out.println("Read failed");
 			e.printStackTrace();
