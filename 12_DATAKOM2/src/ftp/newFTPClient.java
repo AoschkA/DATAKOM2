@@ -269,6 +269,7 @@ public class newFTPClient implements IFTPClient{
 	        checkSucces = retrieveFile(fileToDownload, outputStream1);
 			outputStream1.close();
 			if(checkSucces == true){
+				tui.printMessage("DOWNLOADING...");
 				tui.printMessage("The download was succesfull");
 			}else {
 				tui.printMessage("The download failed");
@@ -281,6 +282,7 @@ public class newFTPClient implements IFTPClient{
 			checkSucces =retrieveFile(fileToDownload, outputStream1);
 			outputStream1.close();
 			if(checkSucces == true){
+				tui.printMessage("UPLOADING...");
 				tui.printMessage("The download was succesfull");
 			}else {
 				tui.printMessage("The download failed");
