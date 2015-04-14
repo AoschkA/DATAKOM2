@@ -59,6 +59,11 @@ public class TUI implements IUI {
 		System.out.println("please enter password");
 	}
 	public void failedConnected(){
-		System.out.println("failed");
+		System.out.println("Failed to connect: wrong ip or port number");
+	}
+
+	public void failedToLogin() {
+		System.out.println("Failed to Login: wrong username or password");
+		
 	}
 }

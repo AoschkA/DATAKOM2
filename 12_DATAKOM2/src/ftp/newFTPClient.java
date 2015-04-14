@@ -123,7 +123,6 @@ public class newFTPClient implements IFTPClient{
 		try{
 			writeLine("QUIT");
 			String response = readLine();
-			
 			if(!response.startsWith("221 ")){
 				throw new IOException("User not logged out");
 			}else{
@@ -137,14 +136,10 @@ public class newFTPClient implements IFTPClient{
 
 	
 	public void writeLine(String line) throws IOException{
-		if(socket == null){
-			throw new IOException("ikke connected");
-		}
 		try{
 			output.writeBytes(line + "\n");
 			output.flush();
 		}catch(IOException e){
-			socket = null;
 			throw e;
 		}
 	}
@@ -159,65 +154,60 @@ public class newFTPClient implements IFTPClient{
 			writeLine("TYPE I");
 			String response = readLine();
 			if(response.startsWith("200 "))	{
-			writeLine("PASV");
-			 response = readLine();
-			if(!response.startsWith("227 ")){
-				throw new IOException("couldn't enter passive mode: " + response);
-			}
-			
-				String ip = null;
-			    int port = -1;
-			    int opening = response.indexOf('(');
-			    int closing = response.indexOf(')', opening + 1);
-			    if (closing > 0) {
-			      String dataLink = response.substring(opening + 1, closing);
-			      StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
-			      try {
-			        ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."
-			            + tokenizer.nextToken() + "." + tokenizer.nextToken();
-			        port = Integer.parseInt(tokenizer.nextToken()) * 256
-			            + Integer.parseInt(tokenizer.nextToken());
-			      } catch (Exception e) {
-			        throw new IOException("couldn't connect probaly to:"
-			            + response);
-			      }
-			    }
-			
-			Socket socket = new Socket(ip, port); 
-			writeLine("LIST -R");
-			response = readLine();
-			if(!response.startsWith("150 ")){
-				throw new IOException("couldn't receive list");
-			}
-				
-			BufferedReader br = null;
-			StringBuilder sb = new StringBuilder();
-	 
-			String line;
-			try {
-				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				while ((line = br.readLine()) != null) {
-					sb.append(line + "\n"  );
+				writeLine("PASV");
+				response = readLine();
+				if(!response.startsWith("227 ")){
+					throw new IOException("couldn't enter passive mode: " + response);
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
+			
+					String ip = null;
+					int port = -1;
+					int opening = response.indexOf('(');
+					int closing = response.indexOf(')', opening + 1);
+					if (closing > 0) {
+						String dataLink = response.substring(opening + 1, closing);
+						StringTokenizer tokenizer = new StringTokenizer(dataLink, ",");
+						try {
+							ip = tokenizer.nextToken() + "." + tokenizer.nextToken() + "."+ tokenizer.nextToken() + "." + tokenizer.nextToken();
+							port = Integer.parseInt(tokenizer.nextToken()) * 256 + Integer.parseInt(tokenizer.nextToken());
+						}catch (Exception e) {
+							throw new IOException("couldn't connect probaly to: " + response);
+						}
+					}
+					Socket socket = new Socket(ip, port); 
+					writeLine("LIST -R");
+					response = readLine();
+					if(!response.startsWith("150 ")){
+						throw new IOException("couldn't receive list");
+					}
+					BufferedReader br = null;
+					StringBuilder sb = new StringBuilder();
+					String line;
 					try {
-						br.close();
+						br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						while ((line = br.readLine()) != null) {
+							sb.append(line + "\n"  );
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
+					} finally {
+						if (br != null) {
+							try {
+								br.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
 					}
-				}
-			}
-			socket.close();
-	    	return sb.toString();
-			}}catch(IOException e){
-				e.printStackTrace();
-			}
+					socket.close();
+					return sb.toString();
+					}}catch(IOException e){
+						e.printStackTrace();
+					}
 		
-		return "no list retrieve ";
-	}
+			return "no list retrieve ";
+		}
+	
 	public void connectAndLogin() throws IOException, NoInputException, InterruptedException{
 		String ip = null;
 		int port = 0;
@@ -226,9 +216,6 @@ public class newFTPClient implements IFTPClient{
 		boolean run = true;
 		ip = ioC.getIP();
 		port = ioC.getPort();
-		if(port == -1){
-			System.exit(0);
-		}
 		user = ioC.username();
 		pass = ioC.password();
 		if(connect(ip,port) == false){
@@ -249,10 +236,11 @@ public class newFTPClient implements IFTPClient{
 					}		
 		}}
 		else{
-			tui.failedConnected();
+			tui.failedToLogin();
 		}
 		
 	}
+	
 	private void retrieveChoosenFile() throws IOException {
 		boolean checkSucces;
 		tui.printMessage("Please enter the name of the file you wish to download");
@@ -269,7 +257,6 @@ public class newFTPClient implements IFTPClient{
 	        checkSucces = retrieveFile(fileToDownload, outputStream1);
 			outputStream1.close();
 			if(checkSucces == true){
-				tui.printMessage("DOWNLOADING...");
 				tui.printMessage("The download was succesfull");
 			}else {
 				tui.printMessage("The download failed");
@@ -282,7 +269,6 @@ public class newFTPClient implements IFTPClient{
 			checkSucces =retrieveFile(fileToDownload, outputStream1);
 			outputStream1.close();
 			if(checkSucces == true){
-				tui.printMessage("UPLOADING...");
 				tui.printMessage("The download was succesfull");
 			}else {
 				tui.printMessage("The download failed");
