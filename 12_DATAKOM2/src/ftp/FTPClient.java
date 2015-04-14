@@ -25,7 +25,7 @@ public class FTPClient implements IFTPClient{
 	BufferedReader reader;
 	TUI tui = new TUI();
 	IOController ioC = new IOController();
-	String list;
+	public String list;
 	boolean checkSucces;
 
 	@Override

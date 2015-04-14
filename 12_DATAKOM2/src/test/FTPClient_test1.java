@@ -1,4 +1,4 @@
-package ftp;
+package test;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -8,9 +8,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.UnknownHostException;
 
+import ftp.FTPClient;
 import ftp.Exceptions.NoInputException;
 
-public class testAfFtpClient {
+public class FTPClient_test1 {
 	static FTPClient ftpC = new FTPClient();
 	
 	public static void main(String args[]) throws UnknownHostException, IOException, NoInputException, InterruptedException{
