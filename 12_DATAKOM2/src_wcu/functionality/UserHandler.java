@@ -21,12 +21,10 @@ public class UserHandler {
 			State changeState(int x) {
 				switch (x) {
 				case 10:
-					vaegtSvar = wc.writeSocket("RM20 8 \"Indtast operatørID\" \"3\" \"hej\" \r\n");
+					vaegtSvar = wc
+							.writeSocket("RM20 8 \"Indtast operatørID\" \"3\" \"hej\" \r\n");
 					return STATE1;
 				default:
-					// TODO: do something
-					// System.out.println("I am now changing from state " + this
-					// + " with int argument x = " + x);
 					return INVALIDSTATE;
 				}
 			}
@@ -35,30 +33,20 @@ public class UserHandler {
 
 			@Override
 			State changeState(int x) {
-				if(vaegtSvar.equals("RM20 B")){
+				if (vaegtSvar.equals("RM20 B")) {
 					System.out.println("hejsa");
 				}
 				switch (x) {
 				case 12:
-					// TODO: do something
 					System.out.println("I am now changing from state " + this
 							+ " with int argument x = " + x);
 					System.out.println(wc.readSocket());
 					return START;
-					// case -1:
-					// // TODO: do something
-					// System.out.println("I am now changing from state " + this
-					// + " with int argument x = " + x);
-					// return START;
-					// case -2:
-					// // TODO: do something
-					// System.out.println("I am now changing from state " + this
-					// + " with int argument x = " + x);
-					// return STOP;
+				case -1:
+					return START;
+				case -2:
+					return STOP;
 				default:
-					// TODO: do something
-					// System.out.println("I am now changing from state " + this
-					// + " with int argument x = " + x);
 					return INVALIDSTATE;
 				}
 			}
@@ -92,8 +80,8 @@ public class UserHandler {
 		System.out.println("Sekvensmaskinen startet.");
 		UserHandler u = new UserHandler();
 		try {
-				u.runScheme(10);
-				u.runScheme(12);
+			u.runScheme(10);
+			u.runScheme(12);
 		} catch (Exception e) {
 			System.out.println("intet data på port");
 		}
