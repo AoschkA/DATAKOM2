@@ -113,7 +113,7 @@ public class newFTPClient implements IFTPClient{
 			        tui.printMessage(response);
 			        return response.startsWith("226 ");
 			}catch (IOException e){
-				e.printStackTrace();
+				tui.printMessage("The choosen file does not exist, please try agian or consult the list for the name of the files on the repository");
 			}
 			return false;
 			
@@ -373,7 +373,7 @@ public class newFTPClient implements IFTPClient{
 		writeLine("TYPE I");
 		String response = readLine();
 		if(response.startsWith("200 ")){
-			tui.printMessage("entered binary mode");
+			tui.printMessage("Entered binary mode");
 			return true;
 		}else{
 			return false;
